@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Menu.unity
+    guid: 390c4f67e8e1a0340be698d76ac6a915
+  - enabled: 1
+    path: Assets/Scenes/CuttingPlane.unity
+    guid: aedc598b9b1a15d47852419c8c41bb7b
+  - enabled: 1
+    path: Assets/Scenes/ObjectViewer/OVFreeView.unity
+    guid: 3175ddddd0f08974cbf558fc5de1730b
+  - enabled: 1
+    path: Assets/Scenes/ObjectViewer/CopyRotationAnimation.unity
+    guid: 4822cd512aeb6014e8f1aba3227851b3
+  - enabled: 1
+    path: Assets/Scenes/ObjectViewer/CopyRotationAsTo.unity
+    guid: 78b0b23036971844d89b2cb23a8082e5
+  - enabled: 1
+    path: Assets/Scenes/ObjectViewer/CopyRotationImage.unity
+    guid: a42b49d908c5b0b4b82f722a6f985141
+  - enabled: 1
+    path: Assets/Scenes/ObjectViewer/CopyRotationImageHard.unity
+    guid: 4e90d942995904c44a495687caf5a4b7
+  - enabled: 1
+    path: Assets/Scenes/ObjectViewer/MultipleChoice2Dto3D.unity
+    guid: cac5410c0652fc44981b1273475a5621
+  - enabled: 1
+    path: Assets/Scenes/ObjectViewer/MultipleChoice3Dto2D.unity
+    guid: ad28ccdc4497fb0408ce591e0a5ede8e
+  - enabled: 1
+    path: Assets/Scenes/ObjectViewer/CopyRotationAnimationEasy.unity
+    guid: fb4773d8d5436af46b0a9e8b07b11b76
+  - enabled: 1
+    path: Assets/Scenes/OrthoViewer/Ortho2Dto3D.unity
+    guid: 733fdca96be95ca4681358b6a0c82159
+  - enabled: 1
+    path: Assets/Scenes/OrthoViewer/OrthoFreeView.unity
+    guid: 8241074642d86e649a325acd14c9ec4d
+  m_configObjects: {}
