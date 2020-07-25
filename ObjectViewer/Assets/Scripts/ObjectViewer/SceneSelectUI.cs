@@ -4,47 +4,50 @@ using UnityEngine;
 
 public class SceneSelectUI : MonoBehaviour
 {
-	public GameObject closedNormal, closedActive, openNormal, openActive;
 	
-	public GameObject sceneSelect;
+	public GameObject sceneSelectObject, labelObject;
 	
 	public bool open = false;
-	private float shiftAmount = 170f;
+	private float shiftAmount, activeRange = 0.8f, closedX, openX, movementDelta = 11f, rotationDelta = 4f;
+	private RectTransform buttons, label;
 	
-    void Update()
+	void Start() {
+		
+		shiftAmount = Screen.width * 0.17f;
+		
+		buttons = sceneSelectObject.GetComponent<RectTransform>();
+		label = labelObject.GetComponent<RectTransform>();
+		
+		closedX = buttons.position.x;
+		openX = closedX - shiftAmount;
+		
+	}
+	
+    void FixedUpdate()
     {
+		Vector3 pos = buttons.position, rot = label.eulerAngles;
 		
-		if (Input.GetKeyUp(KeyCode.LeftShift) || Input.GetKeyUp(KeyCode.RightShift)) // Hide or reveal the scene select UI if shift is released.
-		{
-			Vector3 temp = sceneSelect.GetComponent<RectTransform>().position;
+		if(Input.mousePosition.x > activeRange * Screen.width) {
 			
-			if(open){
-				temp.x += shiftAmount;
-				openActive.SetActive(false);
-				closedNormal.SetActive(true);
-			}
-			else{
-				temp.x -= shiftAmount;
-				closedActive.SetActive(false);
-				openNormal.SetActive(true);
-			}
+			if(pos.x >= openX)
+				pos.x -= movementDelta;
 			
-			sceneSelect.GetComponent<RectTransform>().position = temp;
-			open = !open;
+			if(rot.z > 90)
+				rot.z -= rotationDelta;
+			if(rot.z < 90)
+				rot.z = 90;
+		}
+		else {
+			if(pos.x <= closedX)
+				pos.x += movementDelta;
 			
+			if(rot.z < 180)
+				rot.z += rotationDelta;
+			if(rot.z > 180)
+				rot.z = 180;
 		}
 		
-		if(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
-		{
-			if(open){
-				openNormal.SetActive(false);
-				openActive.SetActive(true);
-			}
-			else{
-				closedNormal.SetActive(false);
-				closedActive.SetActive(true);
-			}
-		}
-        
+		label.eulerAngles = rot;
+		buttons.position = pos;
     }
 }

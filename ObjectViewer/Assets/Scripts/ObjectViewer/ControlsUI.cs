@@ -1,22 +1,37 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
+using UnityEngine.UI;
 
 public class ControlsUI : MonoBehaviour
 {
-	public GameObject wActive, sActive, aActive, dActive, qActive, eActive;
-	public GameObject tabActive, tabNormal, tabClosedActive, tabClosedNormal;
 	
-	public GameObject controls;
+	public Color normal, active;
+	public GameObject q, w, e, a, s, d, r, space;
 	
-	public bool open = true;
+	private Image[] buttons = new Image[8];
 	
-	private float shiftAmount = 270f;
+	private string[] inputs = {"q", "w", "e", "a", "s", "d", "r", "space"};
+	
+	void Start() {
+		buttons[0] = q.GetComponent<Image>();
+		buttons[1] = w.GetComponent<Image>();
+		buttons[2] = e.GetComponent<Image>();
+		buttons[3] = a.GetComponent<Image>();
+		buttons[4] = s.GetComponent<Image>();
+		buttons[5] = d.GetComponent<Image>();
+		buttons[6] = r.GetComponent<Image>();
+		buttons[7] = space.GetComponent<Image>();
+	}
 	
     void Update()
     {
-	
+		for(int i = 0; i < 8; i++)
+			if(Input.GetKey(inputs[i]))
+				buttons[i].color = active;
+			else
+				buttons[i].color = normal;
+		/*
 		if (Input.GetKeyUp("tab")) // Hide or reveal the controls UI if tab is released.
 		{
 			Vector3 temp = controls.GetComponent<RectTransform>().position;
@@ -78,5 +93,7 @@ public class ControlsUI : MonoBehaviour
 			eActive.SetActive(true);
 		else
 			eActive.SetActive(false);
+		
+		*/
     }
 }

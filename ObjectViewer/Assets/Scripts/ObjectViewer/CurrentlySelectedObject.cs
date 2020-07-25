@@ -25,13 +25,10 @@ public class CurrentlySelectedObject : MonoBehaviour
 
     void Update()
     {
-			
 		if(currentlyActive != challengeManager.GetComponent<MultipleChoice2Dto3D>().currentActiveObject){
 			numbers[currentlyActive - 1].color = Color.white;
 			currentlyActive = challengeManager.GetComponent<MultipleChoice2Dto3D>().currentActiveObject;
 			numbers[currentlyActive - 1].color = active;
-			
 		}
-        
     }
 }

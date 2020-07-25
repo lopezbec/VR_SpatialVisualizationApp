@@ -80,6 +80,7 @@ public class MultipleChoice2Dto3D : MonoBehaviour
 			for(int i = 0; i < inputs.Length; i++) // Check if the user has pressed any of the image selection keys (1, 2, etc...).
 				if(Input.GetKeyUp(inputs[i])){
 					userObject.GetComponent<ObjectManager>().SetActive(userObjectsForChallenges[progress, i]);
+					
 					currentActiveObject = i+1;
 				}
 			if(Input.GetKeyUp(KeyCode.Return)){

@@ -52,7 +52,8 @@ public class ObjectViewerRig : MonoBehaviour
 					objectHasRotated = true;
 				}
 			}
-		else{
+			
+		else
 			for(int i = 0; i < inputs.Length; i++){
 				if(Input.GetKey(inputs[i]) && !objectHasRotated) {
 					t.Rotate(rotations[i], Space.World);
@@ -60,7 +61,7 @@ public class ObjectViewerRig : MonoBehaviour
 					objectHasRotated = true;
 				}
 			}
-		}
+			
 		
 		// Movement controls
 		if(translation){
