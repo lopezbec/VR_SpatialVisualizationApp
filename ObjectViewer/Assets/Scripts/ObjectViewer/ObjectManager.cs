@@ -19,7 +19,6 @@ public class ObjectManager : MonoBehaviour
 	}
 	
     void Update(){
-		
 		if(activateKeyControl)
 			for(int i = 0; i < keys.Length; i++){ // Checks if the user has released any of the number keys and sets the active object based on that.
 				if(Input.GetKeyUp(keys[i]) && i < objects.Length){

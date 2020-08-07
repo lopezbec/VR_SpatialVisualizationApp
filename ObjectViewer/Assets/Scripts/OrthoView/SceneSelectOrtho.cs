@@ -9,4 +9,11 @@ public class SceneSelectOrtho : MonoBehaviour
 		SceneManager.LoadScene("Ortho2Dto3D");
 	}
 	
+	public void PlayOrtho3Dto2D(){
+		SceneManager.LoadScene("Ortho3Dto2D");
+	}
+	
+	public void PlayOrthoMatch(){
+		SceneManager.LoadScene("MatchObjectsToDrawings");
+	}
 }

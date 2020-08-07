@@ -5,7 +5,10 @@ using TMPro;
 
 public class FreeViewIntroManager : MonoBehaviour
 {
-    public GameObject introManager, canvas, hiddenLineDrawing, objects, objectManager, axes, xAxis, yAxis, zAxis;
+    public GameObject introManager, canvas, hiddenLineDrawing, objects, objectManager, axes, xAxis, yAxis, zAxis, pressAnyKeyText, UI;
+	
+	public GameObject pageNumberObject, outOf;
+	private TextMeshProUGUI pageNumberText;
 	
 	public GameObject[] text;
 	
@@ -15,16 +18,152 @@ public class FreeViewIntroManager : MonoBehaviour
 	
     void Start()
     {
-		canvas.SetActive(false);
+		pageNumberText = pageNumberObject.GetComponent<TextMeshProUGUI>();
+		
+		pageNumberObject.SetActive(true);
+		outOf.SetActive(true);
+		UI.SetActive(false);
         objects.SetActive(false);
 		axes.SetActive(false);
 		hiddenLineDrawing.SetActive(false);
 		
 		t = objects.GetComponent<Transform>();
     }
+	
+	private int skipTimer = -1, pageNumber = 1;
+	private bool pressed = false;
+	
+	
+	void Update() {
+		
+		if(!Input.anyKey && pressed){
+			pageNumber++;
+			
+		}
+		pressed = Input.anyKey;
+		
+		
+		/*
+		if(!Input.anyKey && pressed){	
+			if(!pressAnyKeyText.activeInHierarchy) {
+				pressAnyKeyText.SetActive(true);
+				skipTimer = 0;
+			}
+			else {
+				canvas.SetActive(true);
+				objects.SetActive(true);
+				objectManager.GetComponent<ObjectViewerRig>().reset();
+				axes.SetActive(true);
+				hiddenLineDrawing.SetActive(true);
+				introManager.SetActive(false);
+			}
+		}
+		if(skipTimer >= 0) 
+			if(skipTimer++ > 500)
+				pressAnyKeyText.SetActive(false);
+		
+		pressed = Input.anyKey;
+		
+		
+		*/
+	}
+	
 
-    void FixedUpdate()
+    void FixedUpdate() // Manages the animation playing and deactivates the intro manager when done.
     {
+		blink();
+		
+		if(pageNumber == 1){
+			pageNumberText.text = "1";
+			
+			text[0].SetActive(true);
+		}
+		else if(pageNumber == 2){
+			pageNumberText.text = "2";
+			objects.SetActive(true);
+			time++;
+			
+			if(time == 100)
+				objectManager.GetComponent<ObjectManager>().SetActive(2);
+			else if(time == 200)
+				objectManager.GetComponent<ObjectManager>().SetActive(3);
+			else if(time == 300){
+				objectManager.GetComponent<ObjectManager>().SetActive(4);
+				time = 0;
+			}
+			
+			text[0].SetActive(false);
+			text[1].SetActive(true);
+		}
+		else if(pageNumber == 3){
+			pageNumberText.text = "3";
+			objectManager.GetComponent<ObjectManager>().SetActive(4);
+			axes.SetActive(true);
+			text[1].SetActive(false);
+			text[2].SetActive(true);
+		}
+		else if(pageNumber == 4){
+			pageNumberText.text = "4";
+			text[2].SetActive(false);
+			text[3].SetActive(true);
+		}
+		else if(pageNumber == 5){
+			pageNumberText.text = "5";
+			text[4].SetActive(true);
+			blinkObject = xAxis;
+			
+			t.Rotate(new Vector3(1f, 0, 0), Space.World);
+		}
+		else if(pageNumber == 6){
+			pageNumberText.text = "6";
+			text[4].SetActive(false);
+			t.eulerAngles = new Vector3(0, 0, 0);
+			xAxis.SetActive(true);
+			pageNumber++;
+		}
+		else if(pageNumber == 7){
+			text[5].SetActive(true);
+			blinkObject = yAxis;
+			
+			t.Rotate(new Vector3(0, 0, 1f), Space.World);
+		}
+		else if(pageNumber == 8){
+			pageNumberText.text = "7";
+			text[5].SetActive(false);
+			t.eulerAngles = new Vector3(0, 0, 0);
+			yAxis.SetActive(true);
+			pageNumber++;
+		}
+		else if(pageNumber == 9){
+			text[6].SetActive(true);
+			blinkObject = zAxis;
+			
+			t.Rotate(new Vector3(0, 1f, 0), Space.World);
+		}
+		else if(pageNumber == 10){
+			pageNumberText.text = "8";
+			zAxis.SetActive(true);
+			text[3].SetActive(false);
+			text[6].SetActive(false);
+			text[7].SetActive(true);
+			objects.SetActive(false);
+			axes.SetActive(false);
+		}
+		
+		else {
+			pageNumberObject.SetActive(false);
+			outOf.SetActive(false);
+			UI.SetActive(true);
+			objects.SetActive(true);
+			axes.SetActive(true);
+			hiddenLineDrawing.SetActive(true);
+			introManager.SetActive(false);
+			t.eulerAngles = new Vector3(0, 0, 0);
+		}
+		
+		
+		
+		/*
 		time++;
 		
 		if(time == 50)
@@ -116,9 +255,11 @@ public class FreeViewIntroManager : MonoBehaviour
 		
 		FadeText();
 		blink();
+		*/
     }
 	
 	private GameObject fadeInText = null, fadeOutText = null; 
+	
 	private void FadeText(){
 		if(fadeInText != null) {
 			if(fadeInText.activeInHierarchy){
@@ -144,22 +285,16 @@ public class FreeViewIntroManager : MonoBehaviour
 		}
 	}
 	
+	
 	private GameObject blinkObject = null;
+	
 	private int blinkTimer = 0;
 	private void blink(){
 		if(blinkObject != null){
 			blinkTimer++;
 			if(blinkTimer == 15)
 				blinkObject.SetActive(false);
-			else if(blinkTimer == 30)
-				blinkObject.SetActive(true);
-			else if(blinkTimer == 45)
-				blinkObject.SetActive(false);
-			else if(blinkTimer == 60)
-				blinkObject.SetActive(true);
-			else if(blinkTimer == 75)
-				blinkObject.SetActive(false);
-			else if(blinkTimer == 90){
+			else if(blinkTimer == 30){
 				blinkObject.SetActive(true);
 				blinkObject = null;
 				blinkTimer = 0;

@@ -8,7 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Menu.unity
     guid: 390c4f67e8e1a0340be698d76ac6a915
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/CuttingPlane.unity
     guid: aedc598b9b1a15d47852419c8c41bb7b
   - enabled: 1
@@ -41,4 +41,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/OrthoViewer/OrthoFreeView.unity
     guid: 8241074642d86e649a325acd14c9ec4d
+  - enabled: 1
+    path: Assets/Scenes/OrthoViewer/MatchObjectsToDrawings.unity
+    guid: dafb90515bbab384495aff7334783d65
+  - enabled: 1
+    path: Assets/Scenes/OrthoViewer/Ortho3Dto2D.unity
+    guid: 98ac99a6eaccb4c4bba4c9138dd2bdff
   m_configObjects: {}

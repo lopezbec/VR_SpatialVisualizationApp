@@ -16,6 +16,11 @@ public class MainMenu : MonoBehaviour
 		SceneManager.LoadScene("CuttingPlane");
 	}
 	
+	public void PlayOrthoViewer()
+	{
+		SceneManager.LoadScene("OrthoFreeView");
+	}
+	
 	public void ExitGame()
 	{
 		Debug.Log("QUIT!");

@@ -8,12 +8,14 @@ public class SceneSelectUI : MonoBehaviour
 	public GameObject sceneSelectObject, labelObject;
 	
 	public bool open = false;
-	private float shiftAmount, activeRange = 0.8f, closedX, openX, movementDelta = 11f, rotationDelta = 4f;
+	private float shiftAmount, activeRange = 0.8f, closedX, openX, movementDelta, rotationDelta = 4f;
 	private RectTransform buttons, label;
 	
 	void Start() {
 		
 		shiftAmount = Screen.width * 0.17f;
+		movementDelta = shiftAmount * 0.05f;
+		
 		
 		buttons = sceneSelectObject.GetComponent<RectTransform>();
 		label = labelObject.GetComponent<RectTransform>();
