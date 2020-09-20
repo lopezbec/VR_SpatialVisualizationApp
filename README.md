@@ -6,7 +6,7 @@ The first module is based on the concept of 2D projection, making a flat drawing
 To see some examples of the practice modules for that idea, try the links below.
 
 ## Motivation and Introduction video
-#### https://www.youtube.com/watch?v=cWpbUIwzxgI&feature=youtu.be
+### https://www.youtube.com/watch?v=cWpbUIwzxgI&feature=youtu.be
 
 ### Spatial Visualization Software Demo - Perspective Viewer
 https://www.youtube.com/watch?v=YJXKnupQKHI
