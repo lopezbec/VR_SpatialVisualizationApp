@@ -5,7 +5,10 @@ This application is designed to help users practice their spatial visualization 
 The first module is based on the concept of 2D projection, making a flat drawing out of a 3D object based on some perspective.
 To see some examples of the practice modules for that idea, try the links below.
 
-### 1) Spatial Visualization Software Demo - Perspective Viewer
+## Motivation and Introduction video
+#### https://www.youtube.com/watch?v=cWpbUIwzxgI&feature=youtu.be
+
+### Spatial Visualization Software Demo - Perspective Viewer
 https://www.youtube.com/watch?v=YJXKnupQKHI
 
 <div class="figure">
@@ -13,7 +16,7 @@ https://www.youtube.com/watch?v=YJXKnupQKHI
 </div>
 
 
-### 2) Spatial Visualization Software Demo - Orthographic Viewer
+### Spatial Visualization Software Demo - Orthographic Viewer
 https://www.youtube.com/watch?v=jSwCx2hQ2Uc
 
 
