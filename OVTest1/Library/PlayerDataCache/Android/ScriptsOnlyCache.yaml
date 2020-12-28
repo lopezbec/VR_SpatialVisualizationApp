@@ -3,6 +3,7 @@ ScriptsOnlyBuild:
     Assembly-CSharp.dll:
     - GestureDetector
     - GrabbableObject
+    - HiddenLineCameraManager
     - ONSPSettings
     - OculusSampleFramework.FingerTipPokeTool
     - OculusSampleFramework.FingerTipPokeToolView
@@ -68,6 +69,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 81
       Script: {instanceID: 0}
+    - Class: 84
+      Script: {instanceID: 0}
     - Class: 104
       Script: {instanceID: 0}
     - Class: 108
@@ -75,68 +78,72 @@ ScriptsOnlyBuild:
     - Class: 109
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 11394}
+      Script: {instanceID: 11416}
     - Class: 114
-      Script: {instanceID: 11534}
+      Script: {instanceID: 11556}
     - Class: 114
-      Script: {instanceID: 11754}
+      Script: {instanceID: 11776}
     - Class: 114
-      Script: {instanceID: 12012}
+      Script: {instanceID: 12034}
     - Class: 114
-      Script: {instanceID: 12080}
+      Script: {instanceID: 12102}
     - Class: 114
-      Script: {instanceID: 12094}
+      Script: {instanceID: 12116}
     - Class: 114
-      Script: {instanceID: 12250}
+      Script: {instanceID: 12270}
     - Class: 114
-      Script: {instanceID: 12328}
+      Script: {instanceID: 12342}
     - Class: 114
-      Script: {instanceID: 12346}
+      Script: {instanceID: 12348}
     - Class: 114
-      Script: {instanceID: 12498}
+      Script: {instanceID: 12366}
     - Class: 114
-      Script: {instanceID: 12616}
+      Script: {instanceID: 12518}
     - Class: 114
-      Script: {instanceID: 12728}
+      Script: {instanceID: 12634}
     - Class: 114
-      Script: {instanceID: 12756}
+      Script: {instanceID: 12746}
     - Class: 114
-      Script: {instanceID: 12852}
+      Script: {instanceID: 12774}
     - Class: 114
-      Script: {instanceID: 12854}
+      Script: {instanceID: 12870}
     - Class: 114
-      Script: {instanceID: 12898}
+      Script: {instanceID: 12872}
     - Class: 114
-      Script: {instanceID: 13000}
+      Script: {instanceID: 12916}
     - Class: 114
-      Script: {instanceID: 13098}
+      Script: {instanceID: 13018}
     - Class: 114
-      Script: {instanceID: 13180}
+      Script: {instanceID: 13116}
     - Class: 114
       Script: {instanceID: 13198}
     - Class: 114
-      Script: {instanceID: 13202}
+      Script: {instanceID: 13216}
     - Class: 114
-      Script: {instanceID: 13396}
+      Script: {instanceID: 13220}
     - Class: 114
-      Script: {instanceID: 13608}
+      Script: {instanceID: 13402}
     - Class: 114
-      Script: {instanceID: 13684}
+      Script: {instanceID: 13416}
     - Class: 114
-      Script: {instanceID: 13788}
+      Script: {instanceID: 13628}
     - Class: 114
-      Script: {instanceID: 13924}
+      Script: {instanceID: 13688}
     - Class: 114
-      Script: {instanceID: 13988}
+      Script: {instanceID: 13706}
     - Class: 114
-      Script: {instanceID: 14090}
+      Script: {instanceID: 13810}
     - Class: 114
-      Script: {instanceID: 43314}
+      Script: {instanceID: 13946}
     - Class: 114
-      Script: {instanceID: 43322}
+      Script: {instanceID: 14010}
+    - Class: 114
+      Script: {instanceID: 14112}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 120
+      Script: {instanceID: 0}
+    - Class: 124
       Script: {instanceID: 0}
     - Class: 128
       Script: {instanceID: 0}
@@ -745,6 +752,12 @@ ScriptsOnlyBuild:
     assemblyName: Assembly-CSharp.dll
     namespaceName: OculusSampleFramework
     className: TrainTrack
+  - hash:
+      serializedVersion: 2
+      Hash: c95d247e0f5d2dc0513eba0ba313d7a9
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: HiddenLineCameraManager
   - hash:
       serializedVersion: 2
       Hash: 76056c447cc3c6f6ef56bfcaed33514e
@@ -1413,6 +1426,12 @@ ScriptsOnlyBuild:
     className: OvrAvatarMaterialManager
   - hash:
       serializedVersion: 2
+      Hash: 7bc1bfff35c894a94616ae426bd131f7
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: GestureDetector
+  - hash:
+      serializedVersion: 2
       Hash: 505a6714ae02fdc2e1ba29de535a4cc5
     assemblyName: Oculus.VR.dll
     namespaceName: 
@@ -1519,6 +1538,12 @@ ScriptsOnlyBuild:
     assemblyName: Assembly-CSharp.dll
     namespaceName: OculusSampleFramework
     className: PanelHMDFollower
+  - hash:
+      serializedVersion: 2
+      Hash: 86801f2804e5c691649b3570e638b46c
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: GrabbableObject
   - hash:
       serializedVersion: 2
       Hash: 76b80dd1b65f63dfa63cf0ea8a906f3a
@@ -1789,18 +1814,6 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: PlayableTrack
-  - hash:
-      serializedVersion: 2
-      Hash: 7bc1bfff35c894a94616ae426bd131f7
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: GestureDetector
-  - hash:
-      serializedVersion: 2
-      Hash: 126c95af19c4043ae096debd470d721f
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: GrabbableObject
   platform: 13
   scenePathNames:
   - Assets/Scenes/FreeView.unity
