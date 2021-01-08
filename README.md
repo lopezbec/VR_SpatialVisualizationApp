@@ -5,6 +5,9 @@ This application is designed to help users practice their spatial visualization 
 The first module is based on the concept of 2D projection, making a flat drawing out of a 3D object based on some perspective.
 To see some examples of the practice modules for that idea, try the links below.
 
+#### Hand Tracking v0.2
+https://www.youtube.com/watch?v=yP_OwQmPLdA&feature=emb_logo
+
 ## Motivation and Introduction video
 ### https://www.youtube.com/watch?v=cWpbUIwzxgI&feature=youtu.be
 
@@ -24,8 +27,6 @@ https://www.youtube.com/watch?v=jSwCx2hQ2Uc
 <img src="https://github.com/lopezbec/VR_SpatialVisualizationApp/blob/master/images/Orthographic%20Viewer.png" width="90%" />
 </div>
 
-#### Hand Tracking v0.2
-https://www.youtube.com/watch?v=yP_OwQmPLdA&feature=emb_logo
 
 #### CopyRotationAnimation
 https://youtu.be/jTCdxMqyM20
