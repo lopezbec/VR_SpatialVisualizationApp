@@ -24,8 +24,8 @@ https://www.youtube.com/watch?v=jSwCx2hQ2Uc
 <img src="https://github.com/lopezbec/VR_SpatialVisualizationApp/blob/master/images/Orthographic%20Viewer.png" width="90%" />
 </div>
 
-#### Hand Tracking v0.1
-https://www.youtube.com/watch?v=lP3ECc0I2iA&feature=youtu.be
+#### Hand Tracking v0.2
+https://www.youtube.com/watch?v=yP_OwQmPLdA&feature=emb_logo
 
 #### CopyRotationAnimation
 https://youtu.be/jTCdxMqyM20
