@@ -7,6 +7,8 @@ using UnityEngine.Events;
 
 public class HandleTextFile : MonoBehaviour
 {
+	public UnityEvent calculate;
+	
 	public GameObject[] voxels;
 	public Transform tCamera;
 	public Camera mainCamera;
@@ -32,11 +34,22 @@ public class HandleTextFile : MonoBehaviour
 		numberOfObjects = 1 + input.Length / (14*27); // This line is based on multiple objects in the input file, which is not supported right now.
 		
 		setObject(0);
+		
     }
+
+	int i = 0;
 
     // Update is called once per frame
     void Update()
     {	
+	
+		if(i < 5){
+			i++;
+		}else if(i == 5){
+			calculate.Invoke();
+			i++;
+		}
+		
 		
     }
 	
