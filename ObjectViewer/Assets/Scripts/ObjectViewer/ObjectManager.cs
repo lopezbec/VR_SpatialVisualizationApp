@@ -7,6 +7,8 @@ public class ObjectManager : MonoBehaviour
 	public GameObject[] objects;
 	public int active = 4;
 	public bool activateKeyControl = true;
+	public ObjectManager dontCopy;
+	public int dontCopyActive;
 	
 	private string[] keys = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
 	
@@ -19,25 +21,43 @@ public class ObjectManager : MonoBehaviour
 	}
 	
     void Update(){
-		if(activateKeyControl)
-			for(int i = 0; i < keys.Length; i++){ // Checks if the user has released any of the number keys and sets the active object based on that.
-				if(Input.GetKeyUp(keys[i]) && i < objects.Length){
+		if (activateKeyControl)
+		{
+			
+
+			for (int i = 0; i < keys.Length; i++)
+			{ // Checks if the user has released any of the number keys and sets the active object based on that.
+				if (Input.GetKeyUp(keys[i]) && i < objects.Length)
+				{
 					int temp = i;
-					
-					if(Input.GetKey(KeyCode.Space) && i + 9 < objects.Length) // Holding the spacebar allows the user to select other objects with the number keys.
+
+					if (Input.GetKey(KeyCode.Space) && i + 9 < objects.Length) // Holding the spacebar allows the user to select other objects with the number keys.
 						temp = temp + 9;
-				
+
+					//if we have an object set to dontCopy, makes sure that the shape won't change to that object
+					if (dontCopy != null)
+					{
+						if(temp == dontCopy.active)
+                        {
+							temp = active;
+						}
+					}
 					objects[active].SetActive(false);
 					active = temp;
 					objects[active].SetActive(true);
+					
 				}
 			}
-    }
+		}
+		
+
+	}
 	
 	public void SetActive(int i){ // Sets the ith game object to be the active object active.
-		objects[active].SetActive(false);
-		active = i;
-		objects[active].SetActive(true);
+	
+			objects[active].SetActive(false);
+			active = i;
+			objects[active].SetActive(true);
 	}
 	
 }
