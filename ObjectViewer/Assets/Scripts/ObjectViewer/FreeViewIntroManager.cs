@@ -15,9 +15,11 @@ public class FreeViewIntroManager : MonoBehaviour
 	private int time = 0;
 	private Transform t;
 	private Color32 blank = new Color32(0, 0, 0, 0);
+	public bool isRun = false;
 	
     void Start()
     {
+       
 		pageNumberText = pageNumberObject.GetComponent<TextMeshProUGUI>();
 		
 		pageNumberObject.SetActive(true);
@@ -36,7 +38,7 @@ public class FreeViewIntroManager : MonoBehaviour
 	
 	void Update() {
 		
-		if(!Input.anyKey && pressed){
+		if (!Input.anyKey && pressed){
 			pageNumber++;
 			
 		}
@@ -67,13 +69,31 @@ public class FreeViewIntroManager : MonoBehaviour
 		
 		*/
 	}
-	
+	public GameObject explanationText;
 
     void FixedUpdate() // Manages the animation playing and deactivates the intro manager when done.
     {
 		blink();
-		
-		if(pageNumber == 1){
+
+		GameObject[] objs = GameObject.FindGameObjectsWithTag("Intro Manager");
+		Debug.Log(objs.Length);
+		if (objs.Length > 1)
+		{
+			isRun = true;
+			pageNumberObject.SetActive(false);
+			outOf.SetActive(false);
+			UI.SetActive(true);
+			objects.SetActive(true);
+			axes.SetActive(true);
+			hiddenLineDrawing.SetActive(true);
+			t.eulerAngles = new Vector3(0, 0, 0);
+			explanationText.SetActive(false);
+			GameObject.Destroy(this.gameObject);
+			DontDestroyOnLoad(objs[1]);
+		}
+
+
+		if (pageNumber == 1){
 			pageNumberText.text = "1";
 			
 			text[0].SetActive(true);
@@ -151,14 +171,20 @@ public class FreeViewIntroManager : MonoBehaviour
 		}
 		
 		else {
+			isRun = true;
 			pageNumberObject.SetActive(false);
 			outOf.SetActive(false);
 			UI.SetActive(true);
 			objects.SetActive(true);
 			axes.SetActive(true);
 			hiddenLineDrawing.SetActive(true);
-			introManager.SetActive(false);
 			t.eulerAngles = new Vector3(0, 0, 0);
+
+			text[7].SetActive(false);
+			introManager.SetActive(true);
+			
+			Debug.Log("here");
+			DontDestroyOnLoad(this.gameObject);
 		}
 		
 		
