@@ -25,10 +25,14 @@ public class CopyImageRotation : MonoBehaviour
 		numberOfChallenges = rotationToMatch.Length + 1; // The number of challenges is given by the number of rotations entered into the array.
 
 		for (int i = 0; i < rotationToMatch.Length; i++) {
-			rotationToMatch[i].x = Random.Range(-1.0f, 1.0f);
-			rotationToMatch[i].y = Random.Range(-1.0f, 1.0f);
-			rotationToMatch[i].z = Random.Range(-1.0f, 1.0f);
-			rotationToMatch[i].w = Random.Range(-1.0f, 1.0f);
+			int x = 15*Random.Range(0, 24);
+			int y = 15 * Random.Range(0, 24);
+			int z = 15 * Random.Range(0, 24);
+			Quaternion copy = Quaternion.Euler(x, y, z);
+			rotationToMatch[i].x = copy.x;
+			rotationToMatch[i].y = copy.y;
+			rotationToMatch[i].z = copy.z;
+			rotationToMatch[i].w = copy.w;
 		}
 
 		matchObject.GetComponent<Transform>().rotation = rotationToMatch[0]; // Make sure the active object is the correct one.
