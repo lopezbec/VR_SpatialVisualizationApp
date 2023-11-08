@@ -5,8 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
- 
-	public void PlayObjectViewer()
+    void Start()
+    {
+		Debug.Log(PlayerPrefs.GetString("PlayerName"));
+	}
+    public void PlayObjectViewer()
 	{
 		SceneManager.LoadScene("OVFreeView"); // Load OVExplanation scene.
 	}
