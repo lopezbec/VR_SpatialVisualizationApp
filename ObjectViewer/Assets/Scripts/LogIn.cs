@@ -18,7 +18,7 @@ public class LogIn : MonoBehaviour
     // Update is called once per frame
     public void submit()
     {
-        user.playerName = userName.text;
+        user.loadFile(userName.text);
         SceneManager.LoadScene("Menu");
     }
 }
