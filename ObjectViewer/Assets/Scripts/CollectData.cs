@@ -8,6 +8,7 @@ public class CollectData : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        List<playerAction> actions = new List<playerAction>();
         DontDestroyOnLoad(this);
     }
 
@@ -15,5 +16,10 @@ public class CollectData : MonoBehaviour
     void Update()
     {
         
+    }
+
+    class playerAction
+    {
+
     }
 }

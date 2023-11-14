@@ -75,7 +75,7 @@ public class FreeViewIntroManager : MonoBehaviour
     {
 		blink();
 
-		GameObject[] objs = GameObject.FindGameObjectsWithTag("Intro Manager");
+		/*GameObject[] objs = GameObject.FindGameObjectsWithTag("Intro Manager");
 		Debug.Log(objs.Length);
 		if (objs.Length > 1)
 		{
@@ -90,8 +90,21 @@ public class FreeViewIntroManager : MonoBehaviour
 			explanationText.SetActive(false);
 			GameObject.Destroy(this.gameObject);
 			DontDestroyOnLoad(objs[1]);
+		}*/
+		if(PlayerPrefs.GetInt("RanIntro") == 1)
+        {
+			isRun = true;
+			pageNumberObject.SetActive(false);
+			outOf.SetActive(false);
+			UI.SetActive(true);
+			objects.SetActive(true);
+			axes.SetActive(true);
+			hiddenLineDrawing.SetActive(true);
+			t.eulerAngles = new Vector3(0, 0, 0);
+			text[7].SetActive(false);
+			introManager.SetActive(false);
+			explanationText.SetActive(false);
 		}
-
 
 		if (pageNumber == 1){
 			pageNumberText.text = "1";
@@ -182,9 +195,9 @@ public class FreeViewIntroManager : MonoBehaviour
 
 			text[7].SetActive(false);
 			introManager.SetActive(true);
-			
-			Debug.Log("here");
-			DontDestroyOnLoad(this.gameObject);
+
+			PlayerPrefs.SetInt("RanIntro", 1);
+		
 		}
 		
 		
