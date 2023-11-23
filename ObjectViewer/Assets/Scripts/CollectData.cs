@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [System.Serializable]
 
@@ -10,14 +11,16 @@ public class CollectData : MonoBehaviour
 {
     int sessionNum = 1;
     string filepath;
-
+    public string currentScene;
     public string playerName;
     public List<PlayerAction> actions;
+    
     // Start is called before the first frame update
     void Start()
     {
         actions = new List<PlayerAction>();
         DontDestroyOnLoad(this);
+        currentScene = "Login";
     }
 
     // Update is called once per frame
@@ -31,6 +34,12 @@ public class CollectData : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.U))
         {
             UpdateFile();
+        }
+        string sceneName = SceneManager.GetActiveScene().name;
+        if (currentScene != sceneName)
+        {
+            actions.Add(new SceneChange(currentScene, sceneName));
+            currentScene = sceneName;
         }
     }
 
@@ -47,11 +56,13 @@ public class CollectData : MonoBehaviour
                 using (StreamReader reader = new StreamReader(filepath))
                 {
                     string str = reader.ReadLine();
-                    while (str != null)
+                    while (!string.IsNullOrEmpty(str))
                     {
+                        sessionNum = int.Parse(str.Split(' ')[0])+1;
+                        Debug.Log(str[0]);
                         str = reader.ReadLine();
-                        sessionNum = str[0]+1;
                     }
+                    
                 }
                 Debug.Log("Reading File Successful");
             }
@@ -59,8 +70,7 @@ public class CollectData : MonoBehaviour
             {
                 Debug.Log("Failed to Read File");
             }
-        }
-        
+        }   
     }
 
     public void UpdateFile() //takes current object data and overwrites file
@@ -99,7 +109,7 @@ public class CollectData : MonoBehaviour
         {
             str += " Login";
         }
-        else if(action is Click)
+        else if (action is Click)
         {
             Click act = action as Click;
             str += " Click";
@@ -107,14 +117,14 @@ public class CollectData : MonoBehaviour
             str += " " + act.mouseLocation.y;
             str += " " + act.mouseLocation.z;
         }
-        else if(action is SceneChange)
+        else if (action is SceneChange)
         {
             SceneChange act = action as SceneChange;
             str += " SceneChange";
             str += " " + act.oldSceneName;
             str += " " + act.newSceneName;
         }
-        else if(action is ChallengeSubmission)
+        else if (action is ChallengeSubmission)
         {
             ChallengeSubmission act = action as ChallengeSubmission;
             str += " ChallengeSubmission";
@@ -123,12 +133,23 @@ public class CollectData : MonoBehaviour
             str += " " + act.currentChallengeNum;
             str += " " + act.totalNumChallenges;
         }
+        else if (action is ButtonPress)
+        {
+            ButtonPress act = action as ButtonPress;
+            str += " ButtonPress";
+            str += " " + act.buttonName;
+        }
         return str;
     }
 
     public void newLogin()
     {
         actions.Add(new Login());
+    }
+
+    public void newButton(string name)
+    {
+        actions.Add(new ButtonPress(name));
     }
 
     public class PlayerAction
@@ -184,7 +205,7 @@ public class CollectData : MonoBehaviour
 
     public class ButtonPress : PlayerAction
     {
-        string buttonName;
+        public string buttonName;
         public ButtonPress(string button)
         {
             System.DateTime time = System.DateTime.Now;

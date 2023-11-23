@@ -32,4 +32,14 @@ public class SceneSelect : MonoBehaviour
 	public void PlayCopyRotationAnimationEasy(){
 		SceneManager.LoadScene("CopyRotationAnimationEasy");
 	}
+
+	public void recordButton(string name)
+    {
+		GameObject collect = GameObject.Find("CollectData");
+		if(collect != null)
+        {
+			CollectData data = collect.GetComponent<CollectData>() as CollectData;
+			data.newButton(name);
+        }
+    }
 }
