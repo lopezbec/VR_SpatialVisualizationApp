@@ -1,13 +1,18 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+
 [System.Serializable]
 
 public class CollectData : MonoBehaviour
 {
-    public string playerName;
+    int sessionNum = 1;
     string filepath;
+
+    public string playerName;
+    public List<PlayerAction> actions;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,86 +25,212 @@ public class CollectData : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            actions.Add(new Click(Input.mousePosition));
+            Vector3 mp = Input.mousePosition;
+            actions.Add(new Click(mp));
+        }
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            UpdateFile();
         }
     }
 
-    public void loadFile(string name)
+    public void loadFile(string name) //is called when player presses submit on login screen, so no data is taken before this point
     {
+        Debug.Log("loading");
         playerName = name;
         filepath = Path.Combine(Application.persistentDataPath, name);
-        //if file already exists then I must copy all data from that file into current actions
-    }
-
-    public void UpdateFile()
-    {
-
-        //takes current object data and overwrites file
-    }
-
-    class PlayerData
-    {
-        List<PlayerAction> actions;
-        
-        public PlayerData()
+        //checks if the file exists, if so checks which session number it is.
+        if (File.Exists(filepath))
         {
-            actions = new List<PlayerAction>();
+            try
+            {
+                using (StreamReader reader = new StreamReader(filepath))
+                {
+                    string str = reader.ReadLine();
+                    while (str != null)
+                    {
+                        str = reader.ReadLine();
+                        sessionNum = str[0]+1;
+                    }
+                }
+                Debug.Log("Reading File Successful");
+            }
+            catch (Exception E)
+            {
+                Debug.Log("Failed to Read File");
+            }
+        }
+        
+    }
+
+    public void UpdateFile() //takes current object data and overwrites file
+    {
+        Debug.Log("updating");
+
+        try
+        {
+            using (StreamWriter writer = new StreamWriter(filepath, true))
+            {//makes a writer that adds onto file instead of overwriting it.)
+                foreach(PlayerAction act in actions)
+                {
+                    writer.WriteLine(PlayerActionToString(act));
+                }
+                
+            }
+            Debug.Log("Writing to File Successful");
+        }
+        catch(Exception E)
+        {
+            Debug.Log("Failed to Write to File");
         }
     }
 
-    class PlayerAction
+    public string PlayerActionToString(PlayerAction action)
     {
-        protected System.DateTime time;
+        string str = "";
+        str += sessionNum;
+        str += " " + action.year;
+        str += " " + action.month;
+        str += " " + action.day;
+        str += " " + action.hour;
+        str += " " + action.minute;
+        str += " " + action.second;
+        if (action is Login)
+        {
+            str += " Login";
+        }
+        else if(action is Click)
+        {
+            Click act = action as Click;
+            str += " Click";
+            str += " " + act.mouseLocation.x;
+            str += " " + act.mouseLocation.y;
+            str += " " + act.mouseLocation.z;
+        }
+        else if(action is SceneChange)
+        {
+            SceneChange act = action as SceneChange;
+            str += " SceneChange";
+            str += " " + act.oldSceneName;
+            str += " " + act.newSceneName;
+        }
+        else if(action is ChallengeSubmission)
+        {
+            ChallengeSubmission act = action as ChallengeSubmission;
+            str += " ChallengeSubmission";
+            str += " " + act.challengeName;
+            str += " " + act.success;
+            str += " " + act.currentChallengeNum;
+            str += " " + act.totalNumChallenges;
+        }
+        return str;
+    }
+
+    public void newLogin()
+    {
+        actions.Add(new Login());
+    }
+
+    public class PlayerAction
+    {
+        public int year;
+        public int month;
+        public int day;
+        public int hour;
+        public int minute;
+        public int second;
+        public PlayerAction()
+        {
+            System.DateTime time = System.DateTime.Now;
+            year = time.Year;
+            month = time.Month;
+            day = time.Day;
+            hour = time.Hour;
+            minute = time.Minute;
+            second = time.Second;
+        }
         //stores the time of the action
     }
 
-    class Login : PlayerAction
+    public class Login : PlayerAction
     {
         public Login()
         {
-            this.time = System.DateTime.Now;
+            System.DateTime time = System.DateTime.Now;
+            year = time.Year;
+            month = time.Month;
+            day = time.Day;
+            hour = time.Hour;
+            minute = time.Minute;
+            second = time.Second;
         }
     }
 
-    class Click : PlayerAction
+    public class Click : PlayerAction
     {
-        Vector3 mouseLocation;
+        public Vector3 mouseLocation;
         public Click(Vector3 location)
         {
-            this.time = System.DateTime.Now;
+            System.DateTime time = System.DateTime.Now;
+            year = time.Year;
+            month = time.Month;
+            day = time.Day;
+            hour = time.Hour;
+            minute = time.Minute;
+            second = time.Second;
             mouseLocation = location;
         }
     }
 
-    class ButtonPress : PlayerAction
+    public class ButtonPress : PlayerAction
     {
         string buttonName;
         public ButtonPress(string button)
         {
-            this.time = System.DateTime.Now;
+            System.DateTime time = System.DateTime.Now;
+            year = time.Year;
+            month = time.Month;
+            day = time.Day;
+            hour = time.Hour;
+            minute = time.Minute;
+            second = time.Second;
             buttonName = button;
         }
     }
 
-    class SceneChange : PlayerAction
+    public class SceneChange : PlayerAction
     {
-        string oldSceneName;
-        string newSceneName;
+        public string oldSceneName;
+        public string newSceneName;
         public SceneChange(string oldS, string newS)
         {
+            System.DateTime time = System.DateTime.Now;
+            year = time.Year;
+            month = time.Month;
+            day = time.Day;
+            hour = time.Hour;
+            minute = time.Minute;
+            second = time.Second;
             oldSceneName = oldS;
             newSceneName = newS;
         }
     }
 
-    class ChallengeSubmission : PlayerAction
+    public class ChallengeSubmission : PlayerAction
     {
-        string challengeName;
-        bool success;
-        int currentChallengeNum;
-        int totalNumChallenges;
+        public string challengeName;
+        public bool success;
+        public int currentChallengeNum;
+        public int totalNumChallenges;
         public ChallengeSubmission(string name, bool correct, int chalNumber, int totalNum)
         {
+            System.DateTime time = System.DateTime.Now;
+            year = time.Year;
+            month = time.Month;
+            day = time.Day;
+            hour = time.Hour;
+            minute = time.Minute;
+            second = time.Second;
             challengeName = name;
             success = correct;
             currentChallengeNum = chalNumber;

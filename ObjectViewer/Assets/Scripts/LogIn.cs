@@ -19,6 +19,7 @@ public class LogIn : MonoBehaviour
     public void submit()
     {
         user.loadFile(userName.text);
+        user.newLogin();
         SceneManager.LoadScene("Menu");
     }
 }
