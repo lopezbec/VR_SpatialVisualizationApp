@@ -35,6 +35,11 @@ public class CollectData : MonoBehaviour
         {
             UpdateFile();
         }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            PlayerPrefs.DeleteAll();
+            PlayerPrefs.Save();
+        }
         string sceneName = SceneManager.GetActiveScene().name;
         if (currentScene != sceneName)
         {

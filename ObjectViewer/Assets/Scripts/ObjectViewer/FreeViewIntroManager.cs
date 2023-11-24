@@ -16,8 +16,9 @@ public class FreeViewIntroManager : MonoBehaviour
 	private Transform t;
 	private Color32 blank = new Color32(0, 0, 0, 0);
 	public bool isRun = false;
-	
-    void Start()
+	public string name;
+
+	void Start()
     {
        
 		pageNumberText = pageNumberObject.GetComponent<TextMeshProUGUI>();
@@ -30,7 +31,18 @@ public class FreeViewIntroManager : MonoBehaviour
 		hiddenLineDrawing.SetActive(false);
 		
 		t = objects.GetComponent<Transform>();
-    }
+
+		GameObject collect = GameObject.Find("CollectData");
+		if (collect != null)
+		{
+			CollectData data = collect.GetComponent<CollectData>() as CollectData;
+			name = data.playerName;
+		}
+        else
+        {
+			name = "";
+        }
+	}
 	
 	private int skipTimer = -1, pageNumber = 1;
 	private bool pressed = false;
@@ -91,7 +103,7 @@ public class FreeViewIntroManager : MonoBehaviour
 			GameObject.Destroy(this.gameObject);
 			DontDestroyOnLoad(objs[1]);
 		}*/
-		if(PlayerPrefs.GetInt("RanIntro") == 1)
+		if(PlayerPrefs.GetInt("RanIntro" + name) == 1)
         {
 			isRun = true;
 			pageNumberObject.SetActive(false);
@@ -196,8 +208,7 @@ public class FreeViewIntroManager : MonoBehaviour
 			text[7].SetActive(false);
 			introManager.SetActive(true);
 
-			PlayerPrefs.SetInt("RanIntro", 1);
-		
+			PlayerPrefs.SetInt("RanIntro" + name, 1);
 		}
 		
 		
