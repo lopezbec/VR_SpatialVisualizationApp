@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 
 public class CollectData : MonoBehaviour
 {
-    int sessionNum = 1;
+    int sessionNum = -1;
     string filepath;
     public string currentScene;
     public string playerName;
@@ -26,10 +26,10 @@ public class CollectData : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && sessionNum > 0)
         {
             Vector3 mp = Input.mousePosition;
-            actions.Add(new Click(mp));
+            actions.Add(new Click(mp, sessionNum));
         }
         if (Input.GetKeyDown(KeyCode.U))
         {
@@ -43,7 +43,7 @@ public class CollectData : MonoBehaviour
         string sceneName = SceneManager.GetActiveScene().name;
         if (currentScene != sceneName)
         {
-            actions.Add(new SceneChange(currentScene, sceneName));
+            actions.Add(new SceneChange(currentScene, sceneName, sessionNum));
             currentScene = sceneName;
         }
     }
@@ -63,11 +63,11 @@ public class CollectData : MonoBehaviour
                     string str = reader.ReadLine();
                     while (!string.IsNullOrEmpty(str))
                     {
-                        sessionNum = int.Parse(str.Split(' ')[0])+1;
+                        sessionNum = int.Parse(str.Split(' ')[0]) + 1;
                         Debug.Log(str[0]);
                         str = reader.ReadLine();
                     }
-                    
+
                 }
                 Debug.Log("Reading File Successful");
             }
@@ -75,7 +75,8 @@ public class CollectData : MonoBehaviour
             {
                 Debug.Log("Failed to Read File");
             }
-        }   
+        }
+        else sessionNum = 1;
     }
 
     public void UpdateFile() //takes current object data and overwrites file
@@ -147,14 +148,48 @@ public class CollectData : MonoBehaviour
         return str;
     }
 
+    public PlayerAction lineToAction(String fileLine)
+    {
+        string[] line = fileLine.Split(' ');
+        PlayerAction action;
+        if (line[7].Equals("Login"))
+        {
+            action = new Login(int.Parse(line[0]));
+        }
+        else if (line[7].Equals("Click"))
+        {
+            Vector3 click = new Vector3(int.Parse(line[8]), int.Parse(line[9]), int.Parse(line[10]));
+            action = new Click(click, int.Parse(line[0]));
+        }
+        else if (line[7].Equals("SceneChange"))
+        {
+            action = new SceneChange(line[8], line[9], int.Parse(line[0]));
+        }
+        else if (line[7].Equals("ChallengeSubmission"))
+        {
+            action = new ChallengeSubmission(line[8], bool.Parse(line[9]), int.Parse(line[10]), int.Parse(line[11]), int.Parse(line[0]));
+        }
+        else //else if (line[7].Equals("ButtonPress"))
+        {
+            action = new ButtonPress(line[8], int.Parse(line[0]));
+        }
+        action.year = int.Parse(line[1]);
+        action.month = int.Parse(line[2]);
+        action.day = int.Parse(line[3]);
+        action.hour = int.Parse(line[4]);
+        action.minute = int.Parse(line[5]);
+        action.second = int.Parse(line[6]);
+        return action;
+    }
+
     public void newLogin()
     {
-        actions.Add(new Login());
+        actions.Add(new Login(sessionNum));
     }
 
     public void newButton(string name)
     {
-        actions.Add(new ButtonPress(name));
+        actions.Add(new ButtonPress(name, sessionNum));
     }
 
     public class PlayerAction
@@ -165,6 +200,8 @@ public class CollectData : MonoBehaviour
         public int hour;
         public int minute;
         public int second;
+        public int session;
+
         public PlayerAction()
         {
             System.DateTime time = System.DateTime.Now;
@@ -180,7 +217,7 @@ public class CollectData : MonoBehaviour
 
     public class Login : PlayerAction
     {
-        public Login()
+        public Login(int sessionNum)
         {
             System.DateTime time = System.DateTime.Now;
             year = time.Year;
@@ -189,13 +226,14 @@ public class CollectData : MonoBehaviour
             hour = time.Hour;
             minute = time.Minute;
             second = time.Second;
+            session = sessionNum;
         }
     }
 
     public class Click : PlayerAction
     {
         public Vector3 mouseLocation;
-        public Click(Vector3 location)
+        public Click(Vector3 location, int sessionNum)
         {
             System.DateTime time = System.DateTime.Now;
             year = time.Year;
@@ -205,13 +243,14 @@ public class CollectData : MonoBehaviour
             minute = time.Minute;
             second = time.Second;
             mouseLocation = location;
+            session = sessionNum;
         }
     }
 
     public class ButtonPress : PlayerAction
     {
         public string buttonName;
-        public ButtonPress(string button)
+        public ButtonPress(string button, int sessionNum)
         {
             System.DateTime time = System.DateTime.Now;
             year = time.Year;
@@ -221,6 +260,7 @@ public class CollectData : MonoBehaviour
             minute = time.Minute;
             second = time.Second;
             buttonName = button;
+            session = sessionNum;
         }
     }
 
@@ -228,7 +268,7 @@ public class CollectData : MonoBehaviour
     {
         public string oldSceneName;
         public string newSceneName;
-        public SceneChange(string oldS, string newS)
+        public SceneChange(string oldS, string newS, int sessionNum)
         {
             System.DateTime time = System.DateTime.Now;
             year = time.Year;
@@ -239,6 +279,7 @@ public class CollectData : MonoBehaviour
             second = time.Second;
             oldSceneName = oldS;
             newSceneName = newS;
+            session = sessionNum;
         }
     }
 
@@ -248,7 +289,7 @@ public class CollectData : MonoBehaviour
         public bool success;
         public int currentChallengeNum;
         public int totalNumChallenges;
-        public ChallengeSubmission(string name, bool correct, int chalNumber, int totalNum)
+        public ChallengeSubmission(string name, bool correct, int chalNumber, int totalNum, int sessionNum)
         {
             System.DateTime time = System.DateTime.Now;
             year = time.Year;
@@ -261,6 +302,7 @@ public class CollectData : MonoBehaviour
             success = correct;
             currentChallengeNum = chalNumber;
             totalNumChallenges = totalNum;
+            session = sessionNum;
         }
     }
 }
