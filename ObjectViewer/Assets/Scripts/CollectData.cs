@@ -16,7 +16,10 @@ public class CollectData : MonoBehaviour
     public List<PlayerAction> actions;
     public List<KeyCode> keysPressed;
     int seconds;
-    
+    float rotationX = 0;
+    float rotationY = 0;
+    float rotationZ = 0;
+    float rotationW = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -59,16 +62,48 @@ public class CollectData : MonoBehaviour
                 {
                     keysPressed.Add(code);
                     actions.Add(new keyPress(code.ToString(), sessionNum));
+                    //if a rotation key was pressed, it has not been pressed yet, and it is a scene where rotations can be made
+                    if (rotationX == 0 && (code == KeyCode.W || code == KeyCode.S || code == KeyCode.Q || code == KeyCode.E || code == KeyCode.A || code == KeyCode.D) && (sceneName.Equals("OVFreeView") || sceneName.Equals("CopyRotationAnimation") || sceneName.Equals("CopyRotationAnimationEasy") || sceneName.Equals("CopyRotationAnimationAsTo") || sceneName.Equals("CopyRotationImage") || sceneName.Equals("CopyRotationImageHard")))
+                    {
+                        GameObject shape = GameObject.Find("ObjectManager");
+                        if (shape != null)
+                        {
+                            Transform shapeRot = shape.GetComponent<Transform>();
+                            Quaternion quatRot = shapeRot.rotation;
+                            rotationX = quatRot.x;
+                            rotationY = quatRot.y;
+                            rotationZ = quatRot.z;
+                            rotationW = quatRot.w;
+                        }
+                    }
                 }
             }
         }
 
-        foreach(KeyCode code in keysPressed)
+            foreach (KeyCode code in keysPressed)
         {
             if (!Input.GetKey(code))
             {
                 actions.Add(new keyReleased(code.ToString(), sessionNum));
                 keysPressed.Remove(code);
+                
+            }
+        }
+
+        //if we were rotating a shape and all of those keys are no longer pressed then we can record the rotation change
+        if (rotationX != 0 && (!keysPressed.Contains(KeyCode.W) && !keysPressed.Contains(KeyCode.S) && !keysPressed.Contains(KeyCode.Q) && !keysPressed.Contains(KeyCode.E) && !keysPressed.Contains(KeyCode.A) && !keysPressed.Contains(KeyCode.D)))
+        {
+            GameObject shape = GameObject.Find("ObjectManager");
+            if (shape != null)
+            {
+                ObjectManager obj = shape.GetComponent<ObjectManager>() as ObjectManager;
+                Transform shapeRot = shape.GetComponent<Transform>();
+                Quaternion quatRot = shapeRot.rotation;
+                actions.Add(new ObjectRotation(obj.objects[obj.active].name, rotationX, rotationY, rotationZ, rotationW, quatRot.x, quatRot.y, quatRot.z, quatRot.w, sessionNum));
+                rotationX = 0;
+                rotationY = 0;
+                rotationZ = 0;
+                rotationW = 0;
             }
         }
     }
@@ -379,6 +414,39 @@ public class CollectData : MonoBehaviour
             success = correct;
             currentChallengeNum = chalNumber;
             totalNumChallenges = totalNum;
+            session = sessionNum;
+        }
+    }
+
+    public class ObjectRotation : PlayerAction
+    {
+        public string objectName;
+        public float pastX;
+        public float pastY;
+        public float pastZ;
+        public float pastW;
+        public float newX;
+        public float newY;
+        public float newZ;
+        public float newW;
+        public ObjectRotation(string objectName_, float pastX_, float pastY_, float pastZ_, float pastW_, float newX_, float newY_, float newZ_, float newW_, int sessionNum)
+        {
+            System.DateTime time = System.DateTime.Now;
+            year = time.Year;
+            month = time.Month;
+            day = time.Day;
+            hour = time.Hour;
+            minute = time.Minute;
+            second = time.Second;
+            objectName = objectName_;
+            pastX = pastX_;
+            pastY = pastY_;
+            pastZ = pastZ_;
+            pastW = pastW_;
+            newX = newX_;
+            newY = newY_;
+            newZ = newZ_;
+            newW = newW_;
             session = sessionNum;
         }
     }
