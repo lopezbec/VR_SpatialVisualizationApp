@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class CopyAnimationRotation : MonoBehaviour
 {
@@ -19,8 +20,11 @@ public class CopyAnimationRotation : MonoBehaviour
 	private int numberOfChallenges = 9;
 	private int progress = 0;
 	private Transform controlledObject, matchObjectTransform;
-	
-	void Start(){		
+	GameObject collect;
+
+
+	void Start(){
+		collect = GameObject.Find("CollectData");
 		controlledObject = objectManager.GetComponent<Transform>();
 		numberOfChallenges = rotationToMatch.Length + 1; // The number of challenges is given by the number of rotations entered into the array.
 		
@@ -84,6 +88,12 @@ public class CopyAnimationRotation : MonoBehaviour
 		
 				if(progress < numberOfChallenges)
 				{
+					if (collect != null)
+					{
+						CollectData data = collect.GetComponent<CollectData>() as CollectData;
+						data.newSubmission(SceneManager.GetActiveScene().name, true, progress+1, numberOfChallenges-1);
+					}
+
 					progressBar[progress++].GetComponent<Image>().sprite = progressCircleFinished; // Set the next progress dot to the finished sprite.
 					
 					objectManager.GetComponent<ObjectManager>().SetActive(correctActiveObject[progress]); // Set the next correct object to be active.
@@ -102,8 +112,16 @@ public class CopyAnimationRotation : MonoBehaviour
 					}
 				}
 			}
-			else
+            else
+            {
+				if (collect != null)
+				{
+					CollectData data = collect.GetComponent<CollectData>() as CollectData;
+					data.newSubmission(SceneManager.GetActiveScene().name, false, progress + 1, numberOfChallenges-1);
+				}
 				tryAnother.SetActive(true); // Set the "try another rotation!" text to visible if the user enters an incorrect rotation.
+			}
+				
 		
     }
 	

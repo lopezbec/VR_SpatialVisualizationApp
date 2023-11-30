@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class MultipleChoice3Dto2D : MonoBehaviour
 {
@@ -46,9 +47,10 @@ public class MultipleChoice3Dto2D : MonoBehaviour
 	private int numberOfChallenges = 9, progress = 0, messageDelayCount, messageDelay = 500;
 	private Transform[] matchTransforms = new Transform[4];
 	private string[] inputs = {"1", "2", "3", "4"};
-	
-	void Start(){		
-	
+	GameObject collect;
+
+	void Start(){
+		collect = GameObject.Find("CollectData");
 		messageDelayCount = messageDelay + 1; // messageDelayCount is used to display a message for some amount of time (messageDelay) after the user enters an input. This step is to prevent starting the challenge with a message showing.
 	
 		numberOfChallenges = userObjectForChallenges.Length; // The number of challenges is given by the inputs into this array in the inspector.
@@ -96,29 +98,43 @@ public class MultipleChoice3Dto2D : MonoBehaviour
 			for(int i = 0; i < inputs.Length; i++) // Check if the user has pressed any of the image selection keys (1, 2, etc...).
 				if(Input.GetKeyUp(inputs[i])){
 					messageDelayCount = 0; // The user has guessed something, so we're going to display some message.
-					
-					if(i+1 == answerPositionForChallenges[progress]){ // If the user has correctly guessed.
-					
+
+					if (i + 1 == answerPositionForChallenges[progress])
+					{ // If the user has correctly guessed.
+						if (collect != null)
+						{
+							CollectData data = collect.GetComponent<CollectData>() as CollectData;
+							data.newSubmission(SceneManager.GetActiveScene().name, true, progress + 1, numberOfChallenges-1);
+						}
 						progressBar[progress++].GetComponent<Image>().sprite = progressCircleFinished; // Set the next progress dot to the finished sprite.
 
-						if(progress >= numberOfChallenges){ // If the user has finished all the challenges, display the ending message.
+						if (progress >= numberOfChallenges)
+						{ // If the user has finished all the challenges, display the ending message.
 							completedText.SetActive(true);
 							imageToMatchObject.SetActive(false);
 						}
-						else{ // else the user has more challenges to do, display the message and hide the other drawings.
+						else
+						{ // else the user has more challenges to do, display the message and hide the other drawings.
 							correctGuessText.SetActive(true);
-						
+
 							matchObjects[0].SetActive(false); // Hide every wrong drawing.
 							matchObjects[1].SetActive(false);
 							matchObjects[2].SetActive(false);
 							matchObjects[3].SetActive(false);
 							matchObjects[answerPositionForChallenges[progress - 1] - 1].SetActive(true);
 						}
-						
+
 					}
-					else // If the user has incorrectly guessed, display a message saying so.
+					else
+					{
+						// If the user has incorrectly guessed, display a message saying so.
+						if (collect != null)
+						{
+							CollectData data = collect.GetComponent<CollectData>() as CollectData;
+							data.newSubmission(SceneManager.GetActiveScene().name, false, progress + 1, numberOfChallenges-1);
+						}
 						tryAnother.SetActive(true);
-					
+					}
 				}
 	}
 }

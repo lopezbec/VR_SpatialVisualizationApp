@@ -14,13 +14,17 @@ public class CollectData : MonoBehaviour
     public string currentScene;
     public string playerName;
     public List<PlayerAction> actions;
+    public List<KeyCode> keysPressed;
+    int seconds;
     
     // Start is called before the first frame update
     void Start()
     {
         actions = new List<PlayerAction>();
+        keysPressed = new List<KeyCode>();
         DontDestroyOnLoad(this);
         currentScene = "Login";
+        seconds = System.DateTime.Now.Second;
     }
 
     // Update is called once per frame
@@ -31,7 +35,7 @@ public class CollectData : MonoBehaviour
             Vector3 mp = Input.mousePosition;
             actions.Add(new Click(mp, sessionNum));
         }
-        if (Input.GetKeyDown(KeyCode.U))
+        if (System.DateTime.Now.Second == seconds || Input.GetKeyDown(KeyCode.U)) //updates the file every minute, or when the U key is pressed
         {
             UpdateFile();
         }
@@ -45,6 +49,27 @@ public class CollectData : MonoBehaviour
         {
             actions.Add(new SceneChange(currentScene, sceneName, sessionNum));
             currentScene = sceneName;
+        }
+
+        if(Input.anyKeyDown && !Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1) && !Input.GetMouseButtonDown(2))
+        {
+            foreach(KeyCode code in System.Enum.GetValues(typeof(KeyCode)))
+            {
+                if (Input.GetKeyDown(code))
+                {
+                    keysPressed.Add(code);
+                    actions.Add(new keyPress(code.ToString(), sessionNum));
+                }
+            }
+        }
+
+        foreach(KeyCode code in keysPressed)
+        {
+            if (!Input.GetKey(code))
+            {
+                actions.Add(new keyReleased(code.ToString(), sessionNum));
+                keysPressed.Remove(code);
+            }
         }
     }
 
@@ -90,6 +115,7 @@ public class CollectData : MonoBehaviour
                 foreach(PlayerAction act in actions)
                 {
                     writer.WriteLine(PlayerActionToString(act));
+                    actions.Remove(act);
                 }
                 
             }
@@ -145,6 +171,18 @@ public class CollectData : MonoBehaviour
             str += " ButtonPress";
             str += " " + act.buttonName;
         }
+        else if (action is keyPress)
+        {
+            keyPress act = action as keyPress;
+            str += " KeyPress";
+            str += " " + act.keyName;
+        }
+        else if (action is keyReleased)
+        {
+            keyReleased act = action as keyReleased;
+            str += " KeyReleased";
+            str += " " + act.keyName;
+        }
         return str;
     }
 
@@ -190,6 +228,11 @@ public class CollectData : MonoBehaviour
     public void newButton(string name)
     {
         actions.Add(new ButtonPress(name, sessionNum));
+    }
+
+    public void newSubmission(string name, bool correct, int chalNumber, int totalNum)
+    {
+        actions.Add(new ChallengeSubmission(name, correct, chalNumber, totalNum, sessionNum));
     }
 
     public class PlayerAction
@@ -260,6 +303,40 @@ public class CollectData : MonoBehaviour
             minute = time.Minute;
             second = time.Second;
             buttonName = button;
+            session = sessionNum;
+        }
+    }
+
+    public class keyPress : PlayerAction
+    {
+        public string keyName;
+        public keyPress(string key, int sessionNum)
+        {
+            System.DateTime time = System.DateTime.Now;
+            year = time.Year;
+            month = time.Month;
+            day = time.Day;
+            hour = time.Hour;
+            minute = time.Minute;
+            second = time.Second;
+            keyName = key;
+            session = sessionNum;
+        }
+    }
+
+    public class keyReleased : PlayerAction
+    {
+        public string keyName;
+        public keyReleased(string key, int sessionNum)
+        {
+            System.DateTime time = System.DateTime.Now;
+            year = time.Year;
+            month = time.Month;
+            day = time.Day;
+            hour = time.Hour;
+            minute = time.Minute;
+            second = time.Second;
+            keyName = key;
             session = sessionNum;
         }
     }
