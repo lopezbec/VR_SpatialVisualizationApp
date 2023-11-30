@@ -218,6 +218,20 @@ public class CollectData : MonoBehaviour
             str += " KeyReleased";
             str += " " + act.keyName;
         }
+        else if (action is ObjectRotation)
+        {
+            ObjectRotation act = action as ObjectRotation;
+            str += " ObjectRotation";
+            str += " " + act.objectName;
+            str += " " + act.pastX;
+            str += " " + act.pastY;
+            str += " " + act.pastZ;
+            str += " " + act.pastW;
+            str += " " + act.newX;
+            str += " " + act.newY;
+            str += " " + act.newZ;
+            str += " " + act.newW;
+        }
         return str;
     }
 
