@@ -79,16 +79,21 @@ public class CollectData : MonoBehaviour
                 }
             }
         }
-
-            foreach (KeyCode code in keysPressed)
+        List<KeyCode> removeKeys = new List<KeyCode>();
+        foreach (KeyCode code in keysPressed)
         {
             if (!Input.GetKey(code))
             {
                 actions.Add(new keyReleased(code.ToString(), sessionNum));
-                keysPressed.Remove(code);
+                removeKeys.Add(code);
                 
             }
         }
+        foreach (KeyCode code in removeKeys)
+        {
+            keysPressed.Remove(code);
+        }
+        removeKeys.Clear();
 
         //if we were rotating a shape and all of those keys are no longer pressed then we can record the rotation change
         if (rotationX != 0 && (!keysPressed.Contains(KeyCode.W) && !keysPressed.Contains(KeyCode.S) && !keysPressed.Contains(KeyCode.Q) && !keysPressed.Contains(KeyCode.E) && !keysPressed.Contains(KeyCode.A) && !keysPressed.Contains(KeyCode.D)))
@@ -150,11 +155,11 @@ public class CollectData : MonoBehaviour
                 foreach(PlayerAction act in actions)
                 {
                     writer.WriteLine(PlayerActionToString(act));
-                    actions.Remove(act);
                 }
                 
             }
             Debug.Log("Writing to File Successful");
+            actions.Clear();
         }
         catch(Exception E)
         {
