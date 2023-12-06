@@ -42,11 +42,11 @@ public class CollectData : MonoBehaviour
         {
             UpdateFile();
         }
-        if (Input.GetKeyDown(KeyCode.R))
+        /*if (Input.GetKeyDown(KeyCode.R))
         {
             PlayerPrefs.DeleteAll();
             PlayerPrefs.Save();
-        }
+        }*/
         string sceneName = SceneManager.GetActiveScene().name;
         if (currentScene != sceneName)
         {
@@ -165,6 +165,7 @@ public class CollectData : MonoBehaviour
         {
             Debug.Log("Failed to Write to File");
         }
+        Debug.Log("Writing to File Complete");
     }
 
     public string PlayerActionToString(PlayerAction action)

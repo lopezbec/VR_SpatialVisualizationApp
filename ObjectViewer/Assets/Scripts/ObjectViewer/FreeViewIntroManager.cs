@@ -16,7 +16,6 @@ public class FreeViewIntroManager : MonoBehaviour
 	private Transform t;
 	private Color32 blank = new Color32(0, 0, 0, 0);
 	public bool isRun = false;
-	public string name;
 
 	void Start()
     {
@@ -31,17 +30,6 @@ public class FreeViewIntroManager : MonoBehaviour
 		hiddenLineDrawing.SetActive(false);
 		
 		t = objects.GetComponent<Transform>();
-
-		GameObject collect = GameObject.Find("CollectData");
-		if (collect != null)
-		{
-			CollectData data = collect.GetComponent<CollectData>() as CollectData;
-			name = data.playerName;
-		}
-        else
-        {
-			name = "";
-        }
 	}
 	
 	private int skipTimer = -1, pageNumber = 1;
