@@ -16,10 +16,11 @@ public class CollectData : MonoBehaviour
     public List<PlayerAction> actions;
     public List<KeyCode> keysPressed;
     int seconds;
-    float rotationX = 0;
-    float rotationY = 0;
-    float rotationZ = 0;
-    float rotationW = 0;
+    float oldRotationX = 0;
+    float oldRotationY = 0;
+    float oldRotationZ = 0;
+    float oldRotationW = 0;
+    bool rotating = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -52,6 +53,10 @@ public class CollectData : MonoBehaviour
         {
             actions.Add(new SceneChange(currentScene, sceneName, sessionNum));
             currentScene = sceneName;
+            if(sceneName.Equals("OVFreeView") || sceneName.Equals("CopyRotationAnimation") || sceneName.Equals("CopyRotationAnimationEasy") || sceneName.Equals("CopyRotationAnimationAsTo") || sceneName.Equals("CopyRotationImage") || sceneName.Equals("CopyRotationImageHard"))
+            {
+                resetRotations();
+            }
         }
 
         if(Input.anyKeyDown && !Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1) && !Input.GetMouseButtonDown(2))
@@ -63,9 +68,11 @@ public class CollectData : MonoBehaviour
                     keysPressed.Add(code);
                     actions.Add(new keyPress(code.ToString(), sessionNum));
                     //if a rotation key was pressed, it has not been pressed yet, and it is a scene where rotations can be made
-                    if (rotationX == 0 && (code == KeyCode.W || code == KeyCode.S || code == KeyCode.Q || code == KeyCode.E || code == KeyCode.A || code == KeyCode.D) && (sceneName.Equals("OVFreeView") || sceneName.Equals("CopyRotationAnimation") || sceneName.Equals("CopyRotationAnimationEasy") || sceneName.Equals("CopyRotationAnimationAsTo") || sceneName.Equals("CopyRotationImage") || sceneName.Equals("CopyRotationImageHard")))
+                    if ((code == KeyCode.W || code == KeyCode.S || code == KeyCode.Q || code == KeyCode.E || code == KeyCode.A || code == KeyCode.D) && (sceneName.Equals("OVFreeView") || sceneName.Equals("CopyRotationAnimation") || sceneName.Equals("CopyRotationAnimationEasy") || sceneName.Equals("CopyRotationAnimationAsTo") || sceneName.Equals("CopyRotationImage") || sceneName.Equals("CopyRotationImageHard")))
                     {
-                        GameObject shape = GameObject.Find("ObjectManager");
+                        rotating = true;
+                        Debug.Log("Rotating true");
+                        /*GameObject shape = GameObject.Find("ObjectManager");
                         if (shape != null)
                         {
                             Transform shapeRot = shape.GetComponent<Transform>();
@@ -74,7 +81,7 @@ public class CollectData : MonoBehaviour
                             rotationY = quatRot.y;
                             rotationZ = quatRot.z;
                             rotationW = quatRot.w;
-                        }
+                        }*/
                     }
                 }
             }
@@ -95,8 +102,27 @@ public class CollectData : MonoBehaviour
         }
         removeKeys.Clear();
 
+        if (rotating) Debug.Log("ROTATING STILL TRUE");
+        if(rotating && !Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.Q) && !Input.GetKey(KeyCode.E))
+        {
+            Debug.Log("Rotating False");
+            GameObject shape = GameObject.Find("ObjectManager");
+            if (shape != null)
+            {
+                Debug.Log("Rotating Record");
+                ObjectManager obj = shape.GetComponent<ObjectManager>() as ObjectManager;
+                Transform shapeRot = shape.GetComponent<Transform>();
+                Quaternion quatRot = shapeRot.rotation;
+                actions.Add(new ObjectRotation(obj.objects[obj.active].name, oldRotationX, oldRotationY, oldRotationZ, oldRotationW, quatRot.x, quatRot.y, quatRot.z, quatRot.w, sessionNum));
+                oldRotationX = quatRot.x;
+                oldRotationY = quatRot.y;
+                oldRotationZ = quatRot.z;
+                oldRotationW = quatRot.w;
+            }
+            rotating = false;
+        }
         //if we were rotating a shape and all of those keys are no longer pressed then we can record the rotation change
-        if (rotationX != 0 && (!keysPressed.Contains(KeyCode.W) && !keysPressed.Contains(KeyCode.S) && !keysPressed.Contains(KeyCode.Q) && !keysPressed.Contains(KeyCode.E) && !keysPressed.Contains(KeyCode.A) && !keysPressed.Contains(KeyCode.D)))
+        /*if (rotationX != 0 && (!keysPressed.Contains(KeyCode.W) && !keysPressed.Contains(KeyCode.S) && !keysPressed.Contains(KeyCode.Q) && !keysPressed.Contains(KeyCode.E) && !keysPressed.Contains(KeyCode.A) && !keysPressed.Contains(KeyCode.D)))
         {
             GameObject shape = GameObject.Find("ObjectManager");
             if (shape != null)
@@ -110,9 +136,23 @@ public class CollectData : MonoBehaviour
                 rotationZ = 0;
                 rotationW = 0;
             }
-        }
+        }*/
     }
 
+    public void resetRotations()
+    {
+        GameObject shape = GameObject.Find("ObjectManager");
+        if (shape != null)
+        {
+            ObjectManager obj = shape.GetComponent<ObjectManager>() as ObjectManager;
+            Transform shapeRot = shape.GetComponent<Transform>();
+            Quaternion quatRot = shapeRot.rotation;
+            oldRotationX = quatRot.x;
+            oldRotationY = quatRot.y;
+            oldRotationZ = quatRot.z;
+            oldRotationW = quatRot.w;
+        }
+    }
     public void loadFile(string name) //is called when player presses submit on login screen, so no data is taken before this point
     {
         Debug.Log("loading");
