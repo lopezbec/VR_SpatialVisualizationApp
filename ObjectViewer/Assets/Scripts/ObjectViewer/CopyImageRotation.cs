@@ -52,24 +52,33 @@ public class CopyImageRotation : MonoBehaviour
 		
 				if(progress < numberOfChallenges)
 				{
+
 					if (collect != null)
 					{
 						CollectData data = collect.GetComponent<CollectData>() as CollectData;
-						data.newSubmission(SceneManager.GetActiveScene().name, true, progress + 1, numberOfChallenges-1);
+						data.newSubmission(SceneManager.GetActiveScene().name, true, progress + 1, numberOfChallenges);
+						data.resetRotations();
 					}
 
 					progressBar[progress++].GetComponent<Image>().sprite = progressCircleFinished; // Set the next progress dot to the finished sprite.
 					
 					objectManager.GetComponent<ObjectManager>().SetActive(correctActiveObject[progress]); // Set the next correct object to be active.
 					matchObject.GetComponent<ObjectManager>().SetActive(correctMatchingActiveObject[progress]);
-					
-					if(progress >= numberOfChallenges - 1){ // If the user has finished all the challenges, display the ending message.
+
+
+					if (progress >= numberOfChallenges - 1){ // If the user has finished all the challenges, display the ending message.
 						completedText.SetActive(true);
 						imageToMatchObject.SetActive(false);
 						pressEnter.SetActive(false);
 					}
 					else{
 						matchObject.GetComponent<Transform>().rotation = rotationToMatch[progress]; // If the user has not finished the challenge, rotate the match object to the desired position.
+					}
+
+					if (collect != null)
+					{
+						CollectData data = collect.GetComponent<CollectData>() as CollectData;
+						data.resetRotations();
 					}
 				}
 			}

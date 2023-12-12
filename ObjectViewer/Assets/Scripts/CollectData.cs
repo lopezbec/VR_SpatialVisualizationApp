@@ -39,9 +39,10 @@ public class CollectData : MonoBehaviour
             Vector3 mp = Input.mousePosition;
             actions.Add(new Click(mp, sessionNum));
         }
-        if (System.DateTime.Now.Second == seconds || Input.GetKeyDown(KeyCode.U)) //updates the file every minute, or when the U key is pressed
+        if (Input.GetKeyDown(KeyCode.U)) //updates the file every minute, or when the U key is pressed
         {
             UpdateFile();
+            Debug.Log("Writing to File Complete");
         }
         /*if (Input.GetKeyDown(KeyCode.R))
         {
@@ -68,10 +69,17 @@ public class CollectData : MonoBehaviour
                     keysPressed.Add(code);
                     actions.Add(new keyPress(code.ToString(), sessionNum));
                     //if a rotation key was pressed, it has not been pressed yet, and it is a scene where rotations can be made
-                    if ((code == KeyCode.W || code == KeyCode.S || code == KeyCode.Q || code == KeyCode.E || code == KeyCode.A || code == KeyCode.D) && (sceneName.Equals("OVFreeView") || sceneName.Equals("CopyRotationAnimation") || sceneName.Equals("CopyRotationAnimationEasy") || sceneName.Equals("CopyRotationAnimationAsTo") || sceneName.Equals("CopyRotationImage") || sceneName.Equals("CopyRotationImageHard")))
+                    if (sceneName.Equals("OVFreeView") || sceneName.Equals("CopyRotationAnimation") || sceneName.Equals("CopyRotationAnimationEasy") || sceneName.Equals("CopyRotationAnimationAsTo") || sceneName.Equals("CopyRotationImage") || sceneName.Equals("CopyRotationImageHard"))
                     {
-                        rotating = true;
-                        Debug.Log("Rotating true");
+                        if (code == KeyCode.W || code == KeyCode.S || code == KeyCode.Q || code == KeyCode.E || code == KeyCode.A || code == KeyCode.D)
+                        {
+                            rotating = true;
+                            Debug.Log("Rotating true");
+                        }
+                        else if (code == KeyCode.R)
+                        {
+                            resetRotations();
+                        }
                         /*GameObject shape = GameObject.Find("ObjectManager");
                         if (shape != null)
                         {
@@ -205,7 +213,6 @@ public class CollectData : MonoBehaviour
         {
             Debug.Log("Failed to Write to File");
         }
-        Debug.Log("Writing to File Complete");
     }
 
     public string PlayerActionToString(PlayerAction action)

@@ -91,15 +91,16 @@ public class CopyAnimationRotation : MonoBehaviour
 					if (collect != null)
 					{
 						CollectData data = collect.GetComponent<CollectData>() as CollectData;
-						data.newSubmission(SceneManager.GetActiveScene().name, true, progress+1, numberOfChallenges-1);
+						data.newSubmission(SceneManager.GetActiveScene().name, true, progress + 1, numberOfChallenges);
 					}
 
 					progressBar[progress++].GetComponent<Image>().sprite = progressCircleFinished; // Set the next progress dot to the finished sprite.
 					
 					objectManager.GetComponent<ObjectManager>().SetActive(correctActiveObject[progress]); // Set the next correct object to be active.
 					matchObject.GetComponent<ObjectManager>().SetActive(correctMatchingActiveObject[progress]);
-					
-					if(progress >= numberOfChallenges - 1){ // If the user has finished all the challenges, display the ending message.
+
+
+					if (progress >= numberOfChallenges - 1){ // If the user has finished all the challenges, display the ending message.
 						completedText.SetActive(true);
 						imageToMatchObject.SetActive(false);
 						pressEnter.SetActive(false);
@@ -109,6 +110,12 @@ public class CopyAnimationRotation : MonoBehaviour
 						animationState = 0; // Reset the animation.
 						delayCounter = 0;
 						matchObjectTransform.eulerAngles = new Vector3(0, 0, 0);
+					}
+
+					if(collect != null)
+                    {
+						CollectData data = collect.GetComponent<CollectData>() as CollectData;
+						data.resetRotations();
 					}
 				}
 			}
