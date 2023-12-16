@@ -15,31 +15,30 @@ public class CollectData : MonoBehaviour
     public string playerName;
     public List<PlayerAction> actions;
     public List<KeyCode> keysPressed;
-    int seconds;
     float oldRotationX = 0;
     float oldRotationY = 0;
     float oldRotationZ = 0;
     //float oldRotationW = 0;
     bool rotating = false;
     // Start is called before the first frame update
+   
     void Start()
     {
         actions = new List<PlayerAction>();
         keysPressed = new List<KeyCode>();
         DontDestroyOnLoad(this);
         currentScene = "Login";
-        seconds = System.DateTime.Now.Second;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && sessionNum > 0)
+        if (Input.GetMouseButtonDown(0) && sessionNum > 0) //when the mouse button is clicked, record it
         {
             Vector3 mp = Input.mousePosition;
             actions.Add(new Click(mp, sessionNum));
         }
-        if (Input.GetKeyDown(KeyCode.U)) //updates the file every minute, or when the U key is pressed
+        if (Input.GetKeyDown(KeyCode.U)) //updates the file when the U key is pressed
         {
             UpdateFile();
             Debug.Log("Writing to File Complete");
@@ -49,26 +48,27 @@ public class CollectData : MonoBehaviour
             PlayerPrefs.DeleteAll();
             PlayerPrefs.Save();
         }*/
-        string sceneName = SceneManager.GetActiveScene().name;
-        if (currentScene != sceneName)
+        string sceneName = SceneManager.GetActiveScene().name; //acquires current scene name
+        if (currentScene != sceneName) //if the scene name has changed, record a scene change
         {
             actions.Add(new SceneChange(currentScene, sceneName, sessionNum));
             currentScene = sceneName;
+            //if the scene that we changed to was one with an object in it, reset the object's rotation value
             if(sceneName.Equals("OVFreeView") || sceneName.Equals("CopyRotationAnimation") || sceneName.Equals("CopyRotationAnimationEasy") || sceneName.Equals("CopyRotationAnimationAsTo") || sceneName.Equals("CopyRotationImage") || sceneName.Equals("CopyRotationImageHard"))
             {
                 resetRotations();
             }
         }
 
-        if(Input.anyKeyDown && !Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1) && !Input.GetMouseButtonDown(2))
+        if(Input.anyKeyDown && !Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1) && !Input.GetMouseButtonDown(2)) //if any key is pressed
         {
-            foreach(KeyCode code in System.Enum.GetValues(typeof(KeyCode)))
+            foreach(KeyCode code in System.Enum.GetValues(typeof(KeyCode))) 
             {
-                if (Input.GetKeyDown(code))
+                if (Input.GetKeyDown(code)) //determine which key was just pressed down
                 {
-                    keysPressed.Add(code);
-                    actions.Add(new keyPress(code.ToString(), sessionNum));
-                    //if a rotation key was pressed, it has not been pressed yet, and it is a scene where rotations can be made
+                    keysPressed.Add(code); //add the key to a list of keys that were pressed down
+                    actions.Add(new keyPress(code.ToString(), sessionNum)); //record that a key was pressed down
+                    //if a rotation key was pressed, it has not been previously pressed yet, and it is a scene where rotations can be made
                     if (sceneName.Equals("OVFreeView") || sceneName.Equals("CopyRotationAnimation") || sceneName.Equals("CopyRotationAnimationEasy") || sceneName.Equals("CopyRotationAnimationAsTo") || sceneName.Equals("CopyRotationImage") || sceneName.Equals("CopyRotationImageHard"))
                     {
                         if (code == KeyCode.W || code == KeyCode.S || code == KeyCode.Q || code == KeyCode.E || code == KeyCode.A || code == KeyCode.D)
@@ -95,32 +95,33 @@ public class CollectData : MonoBehaviour
             }
         }
         List<KeyCode> removeKeys = new List<KeyCode>();
-        foreach (KeyCode code in keysPressed)
+        foreach (KeyCode code in keysPressed) //for each of the keys that were previously pressed down
         {
-            if (!Input.GetKey(code))
+            if (!Input.GetKey(code)) //if the key is no longer pressed down, record that it was released 
             {
                 actions.Add(new keyReleased(code.ToString(), sessionNum));
                 removeKeys.Add(code);
                 
             }
         }
-        foreach (KeyCode code in removeKeys)
+        foreach (KeyCode code in removeKeys) //remove the keys from keysPressed that were released
         {
             keysPressed.Remove(code);
         }
         removeKeys.Clear();
 
         if (rotating) Debug.Log("ROTATING STILL TRUE");
+        //if an object was rotating and now none of the rotating keys are pressed
         if(rotating && !Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.Q) && !Input.GetKey(KeyCode.E))
         {
             Debug.Log("Rotating False");
-            GameObject shape = GameObject.Find("ObjectManager");
+            GameObject shape = GameObject.Find("ObjectManager"); //access the object that holds the rotating shape
             if (shape != null)
             {
-                ObjectManager obj = shape.GetComponent<ObjectManager>() as ObjectManager;
+                /*ObjectManager obj = shape.GetComponent<ObjectManager>() as ObjectManager;
                 Transform shapeRot = shape.GetComponent<Transform>();
                 Quaternion quatRot = shapeRot.rotation;
-                /*if (oldRotationW != quatRot.w || oldRotationX != quatRot.x || oldRotationY != quatRot.y || oldRotationZ != quatRot.z) //quaternion rotation values
+                if (oldRotationW != quatRot.w || oldRotationX != quatRot.x || oldRotationY != quatRot.y || oldRotationZ != quatRot.z) //quaternion rotation values
                 {
                     actions.Add(new ObjectRotation(obj.objects[obj.active].name, oldRotationX, oldRotationY, oldRotationZ, oldRotationW, quatRot.x, quatRot.y, quatRot.z, quatRot.w, sessionNum));
                     oldRotationX = quatRot.x;
@@ -128,6 +129,8 @@ public class CollectData : MonoBehaviour
                     oldRotationZ = quatRot.z;
                     oldRotationW = quatRot.w;
                 }*/
+                
+                //record the change in rotation
                 Vector3 angles = shape.transform.localEulerAngles;
                 if (oldRotationX != angles.x || oldRotationY != angles.y || oldRotationZ != angles.z) //euler rotation values
                 {
@@ -159,7 +162,7 @@ public class CollectData : MonoBehaviour
         }*/
     }
 
-    public void resetRotations()
+    public void resetRotations() //resets all of the rotations to the current state of the object
     {
         GameObject shape = GameObject.Find("ObjectManager");
         if (shape != null)
@@ -208,7 +211,7 @@ public class CollectData : MonoBehaviour
         else sessionNum = 1;
     }
 
-    public void UpdateFile() //takes current object data and overwrites file
+    public void UpdateFile() //takes current object data and writes to the file
     {
         Debug.Log("updating");
 
@@ -231,7 +234,7 @@ public class CollectData : MonoBehaviour
         }
     }
 
-    public string PlayerActionToString(PlayerAction action)
+    public string PlayerActionToString(PlayerAction action) //this will take a player action object and turn it into a string to be written to the file.
     {
         string str = "";
         str += sessionNum;
@@ -304,7 +307,7 @@ public class CollectData : MonoBehaviour
         return str;
     }
 
-    public PlayerAction lineToAction(String fileLine)
+    public PlayerAction lineToAction(String fileLine) //this will do the opposite of the previous function, where it will take a line from the file and turn it inot a playerAction object, not up to date
     {
         string[] line = fileLine.Split(' ');
         PlayerAction action;
@@ -338,22 +341,22 @@ public class CollectData : MonoBehaviour
         return action;
     }
 
-    public void newLogin()
+    public void newLogin() //creates new login action
     {
         actions.Add(new Login(sessionNum));
     }
 
-    public void newButton(string name)
+    public void newButton(string name) //records new button press
     {
         actions.Add(new ButtonPress(name, sessionNum));
     }
 
-    public void newSubmission(string name, bool correct, int chalNumber, int totalNum)
+    public void newSubmission(string name, bool correct, int chalNumber, int totalNum) //records a challenge submission
     {
         actions.Add(new ChallengeSubmission(name, correct, chalNumber, totalNum, sessionNum));
     }
 
-    public class PlayerAction
+    public class PlayerAction //the parent class PlayerAction, holds the current time and session number
     {
         public int year;
         public int month;
@@ -376,7 +379,7 @@ public class CollectData : MonoBehaviour
         //stores the time of the action
     }
 
-    public class Login : PlayerAction
+    public class Login : PlayerAction //child class, holds data of when the player logs in 
     {
         public Login(int sessionNum)
         {
@@ -391,7 +394,7 @@ public class CollectData : MonoBehaviour
         }
     }
 
-    public class Click : PlayerAction
+    public class Click : PlayerAction //child class holds data of when the player clicks
     {
         public Vector3 mouseLocation;
         public Click(Vector3 location, int sessionNum)
@@ -408,7 +411,7 @@ public class CollectData : MonoBehaviour
         }
     }
 
-    public class ButtonPress : PlayerAction
+    public class ButtonPress : PlayerAction //child class holds data of when the player presses a button
     {
         public string buttonName;
         public ButtonPress(string button, int sessionNum)
@@ -425,7 +428,7 @@ public class CollectData : MonoBehaviour
         }
     }
 
-    public class keyPress : PlayerAction
+    public class keyPress : PlayerAction //child class holds data of when a key is pressed
     {
         public string keyName;
         public keyPress(string key, int sessionNum)
@@ -442,7 +445,7 @@ public class CollectData : MonoBehaviour
         }
     }
 
-    public class keyReleased : PlayerAction
+    public class keyReleased : PlayerAction //child class holds data of when a key is released
     {
         public string keyName;
         public keyReleased(string key, int sessionNum)
@@ -459,7 +462,7 @@ public class CollectData : MonoBehaviour
         }
     }
 
-    public class SceneChange : PlayerAction
+    public class SceneChange : PlayerAction //child class holds data of when a scene is changed
     {
         public string oldSceneName;
         public string newSceneName;
@@ -478,7 +481,7 @@ public class CollectData : MonoBehaviour
         }
     }
 
-    public class ChallengeSubmission : PlayerAction
+    public class ChallengeSubmission : PlayerAction //child class holds data of when a challenge answer is submitted
     {
         public string challengeName;
         public bool success;
@@ -501,7 +504,7 @@ public class CollectData : MonoBehaviour
         }
     }
 
-    public class ObjectRotation : PlayerAction
+    public class ObjectRotation : PlayerAction //child class holds data of a rotation of an object/shape
     {
         public string objectName;
         public float pastX;
