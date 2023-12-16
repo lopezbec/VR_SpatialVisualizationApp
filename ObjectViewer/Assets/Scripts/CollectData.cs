@@ -19,7 +19,7 @@ public class CollectData : MonoBehaviour
     float oldRotationX = 0;
     float oldRotationY = 0;
     float oldRotationZ = 0;
-    float oldRotationW = 0;
+    //float oldRotationW = 0;
     bool rotating = false;
     // Start is called before the first frame update
     void Start()
@@ -117,17 +117,26 @@ public class CollectData : MonoBehaviour
             GameObject shape = GameObject.Find("ObjectManager");
             if (shape != null)
             {
-                Debug.Log("Rotating Record");
                 ObjectManager obj = shape.GetComponent<ObjectManager>() as ObjectManager;
                 Transform shapeRot = shape.GetComponent<Transform>();
                 Quaternion quatRot = shapeRot.rotation;
-                if (oldRotationW != quatRot.w || oldRotationX != quatRot.x || oldRotationY != quatRot.y || oldRotationZ != quatRot.z)
+                /*if (oldRotationW != quatRot.w || oldRotationX != quatRot.x || oldRotationY != quatRot.y || oldRotationZ != quatRot.z) //quaternion rotation values
                 {
                     actions.Add(new ObjectRotation(obj.objects[obj.active].name, oldRotationX, oldRotationY, oldRotationZ, oldRotationW, quatRot.x, quatRot.y, quatRot.z, quatRot.w, sessionNum));
                     oldRotationX = quatRot.x;
                     oldRotationY = quatRot.y;
                     oldRotationZ = quatRot.z;
                     oldRotationW = quatRot.w;
+                }*/
+                Vector3 angles = shape.transform.localEulerAngles;
+                if (oldRotationX != angles.x || oldRotationY != angles.y || oldRotationZ != angles.z) //euler rotation values
+                {
+                    /*actions.Add(new ObjectRotation(obj.objects[obj.active].name, oldRotationX, oldRotationY, oldRotationZ, oldRotationW, quatRot.x, quatRot.y, quatRot.z, quatRot.w, sessionNum));*/
+                    actions.Add(new ObjectRotation(obj.objects[obj.active].name, oldRotationX, oldRotationY, oldRotationZ, angles.x, angles.y, angles.z, sessionNum));
+                    Debug.Log(oldRotationX + " " + oldRotationY + " " + oldRotationZ + " " + angles.x + " " + angles.y + " " + angles.z);
+                    oldRotationX = angles.x;
+                    oldRotationY = angles.y;
+                    oldRotationZ = angles.z;
                 }
             }
             rotating = false;
@@ -155,13 +164,17 @@ public class CollectData : MonoBehaviour
         GameObject shape = GameObject.Find("ObjectManager");
         if (shape != null)
         {
-            ObjectManager obj = shape.GetComponent<ObjectManager>() as ObjectManager;
+            /*ObjectManager obj = shape.GetComponent<ObjectManager>() as ObjectManager;
             Transform shapeRot = shape.GetComponent<Transform>();
             Quaternion quatRot = shapeRot.rotation;
             oldRotationX = quatRot.x;
             oldRotationY = quatRot.y;
-            oldRotationZ = quatRot.z;
-            oldRotationW = quatRot.w;
+            oldRotationZ = quatRot.z;*/
+            //oldRotationW = quatRot.w;
+            Vector3 angles = shape.transform.localEulerAngles;
+            oldRotationX = angles.x;
+            oldRotationY = angles.y;
+            oldRotationZ = angles.z;
         }
     }
     public void loadFile(string name) //is called when player presses submit on login screen, so no data is taken before this point
@@ -282,11 +295,11 @@ public class CollectData : MonoBehaviour
             str += " " + act.pastX;
             str += " " + act.pastY;
             str += " " + act.pastZ;
-            str += " " + act.pastW;
+            //str += " " + act.pastW;
             str += " " + act.newX;
             str += " " + act.newY;
             str += " " + act.newZ;
-            str += " " + act.newW;
+            //str += " " + act.newW;
         }
         return str;
     }
@@ -499,7 +512,7 @@ public class CollectData : MonoBehaviour
         public float newY;
         public float newZ;
         public float newW;
-        public ObjectRotation(string objectName_, float pastX_, float pastY_, float pastZ_, float pastW_, float newX_, float newY_, float newZ_, float newW_, int sessionNum)
+        /*public ObjectRotation(string objectName_, float pastX_, float pastY_, float pastZ_, float pastW_, float newX_, float newY_, float newZ_, float newW_, int sessionNum)
         {
             System.DateTime time = System.DateTime.Now;
             year = time.Year;
@@ -517,6 +530,25 @@ public class CollectData : MonoBehaviour
             newY = newY_;
             newZ = newZ_;
             newW = newW_;
+            session = sessionNum;
+        }*/
+
+        public ObjectRotation(string objectName_, float pastX_, float pastY_, float pastZ_, float newX_, float newY_, float newZ_, int sessionNum)
+        {
+            System.DateTime time = System.DateTime.Now;
+            year = time.Year;
+            month = time.Month;
+            day = time.Day;
+            hour = time.Hour;
+            minute = time.Minute;
+            second = time.Second;
+            objectName = objectName_;
+            pastX = pastX_;
+            pastY = pastY_;
+            pastZ = pastZ_;
+            newX = newX_;
+            newY = newY_;
+            newZ = newZ_;
             session = sessionNum;
         }
     }
