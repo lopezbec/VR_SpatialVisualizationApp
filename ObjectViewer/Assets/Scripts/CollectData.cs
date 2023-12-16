@@ -121,11 +121,14 @@ public class CollectData : MonoBehaviour
                 ObjectManager obj = shape.GetComponent<ObjectManager>() as ObjectManager;
                 Transform shapeRot = shape.GetComponent<Transform>();
                 Quaternion quatRot = shapeRot.rotation;
-                actions.Add(new ObjectRotation(obj.objects[obj.active].name, oldRotationX, oldRotationY, oldRotationZ, oldRotationW, quatRot.x, quatRot.y, quatRot.z, quatRot.w, sessionNum));
-                oldRotationX = quatRot.x;
-                oldRotationY = quatRot.y;
-                oldRotationZ = quatRot.z;
-                oldRotationW = quatRot.w;
+                if (oldRotationW != quatRot.w || oldRotationX != quatRot.x || oldRotationY != quatRot.y || oldRotationZ != quatRot.z)
+                {
+                    actions.Add(new ObjectRotation(obj.objects[obj.active].name, oldRotationX, oldRotationY, oldRotationZ, oldRotationW, quatRot.x, quatRot.y, quatRot.z, quatRot.w, sessionNum));
+                    oldRotationX = quatRot.x;
+                    oldRotationY = quatRot.y;
+                    oldRotationZ = quatRot.z;
+                    oldRotationW = quatRot.w;
+                }
             }
             rotating = false;
         }
