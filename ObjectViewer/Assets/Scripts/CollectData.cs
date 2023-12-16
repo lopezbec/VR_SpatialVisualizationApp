@@ -118,8 +118,8 @@ public class CollectData : MonoBehaviour
             GameObject shape = GameObject.Find("ObjectManager"); //access the object that holds the rotating shape
             if (shape != null)
             {
-                /*ObjectManager obj = shape.GetComponent<ObjectManager>() as ObjectManager;
-                Transform shapeRot = shape.GetComponent<Transform>();
+                ObjectManager obj = shape.GetComponent<ObjectManager>() as ObjectManager;
+                /*Transform shapeRot = shape.GetComponent<Transform>();
                 Quaternion quatRot = shapeRot.rotation;
                 if (oldRotationW != quatRot.w || oldRotationX != quatRot.x || oldRotationY != quatRot.y || oldRotationZ != quatRot.z) //quaternion rotation values
                 {
