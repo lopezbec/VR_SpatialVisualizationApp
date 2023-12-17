@@ -1,6 +1,6 @@
 ﻿As the game is played, the actions committed by the player are stored to a file in Application.persistentDataPath. The file is a text file where every line is an individual action, and information regarding the elements is space separated. Currently, it will record the player’s current session number, the time the action occurred, and what type of action it was, including player login, mouse clicks, keyboard key presses, keyboard key releases, button presses, scene changes, shape rotations, and challenge submissions.
 
-**Line Format:**
+#Line Format:
 
 SessionNumber Year Month Day Hour Minute Second Millisecond ActionType …ActionDetails… **Action Types and Details:**
 
