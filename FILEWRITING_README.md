@@ -4,7 +4,9 @@
 
 **Line Format:**
 
-SessionNumber Year Month Day Hour Minute Second Millisecond ActionType …ActionDetails… **Action Types and Details:**
+SessionNumber Year Month Day Hour Minute Second Millisecond ActionType …ActionDetails… 
+
+**Action Types and Details:**
 
 
 **Login** 
