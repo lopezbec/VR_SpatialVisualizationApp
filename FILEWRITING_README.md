@@ -4,19 +4,19 @@
 
 ## Line Format:
 
-##### SessionNumber Year Month Day Hour Minute Second Millisecond ActionType …ActionDetails… 
+#### SessionNumber Year Month Day Hour Minute Second Millisecond ActionType …ActionDetails… 
 
 ## Action Types and Details:
 
 
-#### Login
+### Login
 
-Login
+#### Login
 
 Records when the player enters a username and logs in to the game
 
 
-#### Click
+### Click
 
 Click mouseLocationX mouseLocationY mouseLocationZ
 
