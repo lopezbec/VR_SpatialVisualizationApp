@@ -18,24 +18,20 @@ Records when the player enters a username and logs in to the game
 
 ### Click
 
-Click mouseLocationX mouseLocationY mouseLocationZ
-
-
-
+#### Click mouseLocationX mouseLocationY mouseLocationZ
+   
 mouseLocationX: X coordinate of the mouse
 
 mouseLocationY: Y coordinate of the mouse 
 
 mouseLocationZ: Z coordinate of the mouse
 
-
-
 Whenever the user clicks, records the location of the mouse.
 
 
-**Scene Change**
+### Scene Change
 
-SceneChange oldSceneName newSceneName
+#### SceneChange oldSceneName newSceneName
 
 oldSceneName: name of the previous scene 
 
@@ -44,9 +40,9 @@ newSceneName: name of the current, new scene
 Whenever the game scene changes, record the transition between scenes.
 
 
-**Challenge Submission**
+### Challenge Submission
 
-ChallengeSubmission challengeName success currentChallengeNum totalChallenges
+#### ChallengeSubmission challengeName success currentChallengeNum totalChallenges
 
 challengeName: name of the current challenge
 
@@ -59,34 +55,34 @@ totalChallenges: the total number of questions for the user in this set
 Whenever the user submits an answer to a challenge question it records this information. 
 
 
-**Button Press**
+### Button Press
 
-ButtonPress buttonName
+#### ButtonPress buttonName
 
 When the user clicks an in-game button, it records the name of the button pressed.
 
 
-**Keyboard Key Press** 
+### Keyboard Key Press
 
-KeyPress keyName
+#### KeyPress keyName
 
 keyName: symbol/letter of the key pressed
 
 When the user presses a keyboard key, it records which key was pressed. 
 
 
-**Keyboard Key Release**
+### Keyboard Key Release
 
-KeyReleased keyName
+#### KeyReleased keyName
 
 keyName: symbol/letter of the key released
 
 When the user releases a keyboard key, it records which key was released.
 
 
-**Object Rotation**
+### Object Rotation
 
-ObjectRotation objectName pastX pastY pastZ newX newY newZ
+#### ObjectRotation objectName pastX pastY pastZ newX newY newZ
 
 objectName: the name of the object being rotated
 
