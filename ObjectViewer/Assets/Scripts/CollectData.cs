@@ -22,6 +22,8 @@ public class CollectData : MonoBehaviour
     bool rotating = false;
     // Start is called before the first frame update
     StreamWriter writer;
+    int pixelsWidth;
+    int pixelsHeight;
    
     void Start()
     {
@@ -29,6 +31,8 @@ public class CollectData : MonoBehaviour
         keysPressed = new List<KeyCode>();
         DontDestroyOnLoad(this);
         currentScene = "Login";
+        pixelsWidth = Screen.width;
+        pixelsHeight = Screen.height;
     }
 
     // Update is called once per frame
