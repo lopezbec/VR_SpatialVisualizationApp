@@ -21,6 +21,7 @@ public class CollectData : MonoBehaviour
     //float oldRotationW = 0;
     bool rotating = false;
     // Start is called before the first frame update
+    StreamWriter writer;
    
     void Start()
     {
@@ -33,11 +34,19 @@ public class CollectData : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         if (Input.GetMouseButtonDown(0) && sessionNum > 0) //when the mouse button is clicked, record it
         {
             Vector3 mp = Input.mousePosition;
             actions.Add(new Click(mp, sessionNum));
         }
+
+        if(actions.Count != 0)
+        {
+            UpdateFile();
+        }
+
+
         if (Input.GetKeyDown(KeyCode.U)) //updates the file when the U key is pressed
         {
             UpdateFile();
@@ -209,24 +218,26 @@ public class CollectData : MonoBehaviour
             }
         }
         else sessionNum = 1;
+        writer = new StreamWriter(filepath, true);
     }
 
     public void UpdateFile() //takes current object data and writes to the file
     {
+        
         Debug.Log("updating");
 
         try
         {
-            using (StreamWriter writer = new StreamWriter(filepath, true))
-            {//makes a writer that adds onto file instead of overwriting it.)
-                foreach(PlayerAction act in actions)
-                {
-                    writer.WriteLine(PlayerActionToString(act));
-                }
-                
+            foreach (PlayerAction act in actions)
+            {
+                String line = PlayerActionToString(act);
+                Debug.Log(line);
+                writer.WriteLine(line);
             }
+            
             Debug.Log("Writing to File Successful");
             actions.Clear();
+            writer.Flush();
         }
         catch(Exception E)
         {
@@ -244,6 +255,7 @@ public class CollectData : MonoBehaviour
         str += " " + action.hour;
         str += " " + action.minute;
         str += " " + action.second;
+        str += " " + action.milli;
         if (action is Login)
         {
             str += " Login";
@@ -365,6 +377,7 @@ public class CollectData : MonoBehaviour
         public int minute;
         public int second;
         public int session;
+        public int milli;
 
         public PlayerAction()
         {
@@ -375,8 +388,9 @@ public class CollectData : MonoBehaviour
             hour = time.Hour;
             minute = time.Minute;
             second = time.Second;
+            milli = time.Millisecond;
         }
-        //stores the time of the action
+        //stores the time of ;the action
     }
 
     public class Login : PlayerAction //child class, holds data of when the player logs in 
@@ -390,6 +404,7 @@ public class CollectData : MonoBehaviour
             hour = time.Hour;
             minute = time.Minute;
             second = time.Second;
+            milli = time.Millisecond;
             session = sessionNum;
         }
     }
@@ -406,6 +421,7 @@ public class CollectData : MonoBehaviour
             hour = time.Hour;
             minute = time.Minute;
             second = time.Second;
+            milli = time.Millisecond;
             mouseLocation = location;
             session = sessionNum;
         }
@@ -423,6 +439,7 @@ public class CollectData : MonoBehaviour
             hour = time.Hour;
             minute = time.Minute;
             second = time.Second;
+            milli = time.Millisecond;
             buttonName = button;
             session = sessionNum;
         }
@@ -440,6 +457,7 @@ public class CollectData : MonoBehaviour
             hour = time.Hour;
             minute = time.Minute;
             second = time.Second;
+            milli = time.Millisecond;
             keyName = key;
             session = sessionNum;
         }
@@ -457,6 +475,7 @@ public class CollectData : MonoBehaviour
             hour = time.Hour;
             minute = time.Minute;
             second = time.Second;
+            milli = time.Millisecond;
             keyName = key;
             session = sessionNum;
         }
@@ -475,6 +494,7 @@ public class CollectData : MonoBehaviour
             hour = time.Hour;
             minute = time.Minute;
             second = time.Second;
+            milli = time.Millisecond;
             oldSceneName = oldS;
             newSceneName = newS;
             session = sessionNum;
@@ -496,6 +516,7 @@ public class CollectData : MonoBehaviour
             hour = time.Hour;
             minute = time.Minute;
             second = time.Second;
+            milli = time.Millisecond;
             challengeName = name;
             success = correct;
             currentChallengeNum = chalNumber;
@@ -524,6 +545,7 @@ public class CollectData : MonoBehaviour
             hour = time.Hour;
             minute = time.Minute;
             second = time.Second;
+            milli = time.Millisecond;
             objectName = objectName_;
             pastX = pastX_;
             pastY = pastY_;
@@ -545,6 +567,7 @@ public class CollectData : MonoBehaviour
             hour = time.Hour;
             minute = time.Minute;
             second = time.Second;
+            milli = time.Millisecond;
             objectName = objectName_;
             pastX = pastX_;
             pastY = pastY_;
