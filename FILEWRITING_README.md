@@ -20,11 +20,15 @@ Records when the player enters a username and logs in to the game
 
 Click mouseLocationX mouseLocationY mouseLocationZ
 
+
+
 mouseLocationX: X coordinate of the mouse
 
 mouseLocationY: Y coordinate of the mouse 
 
 mouseLocationZ: Z coordinate of the mouse
+
+
 
 Whenever the user clicks, records the location of the mouse.
 
