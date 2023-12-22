@@ -16,8 +16,8 @@ public class FreeViewIntroManager : MonoBehaviour
 	private Transform t;
 	private Color32 blank = new Color32(0, 0, 0, 0);
 	public bool isRun = false;
-	
-    void Start()
+
+	void Start()
     {
        
 		pageNumberText = pageNumberObject.GetComponent<TextMeshProUGUI>();
@@ -30,7 +30,7 @@ public class FreeViewIntroManager : MonoBehaviour
 		hiddenLineDrawing.SetActive(false);
 		
 		t = objects.GetComponent<Transform>();
-    }
+	}
 	
 	private int skipTimer = -1, pageNumber = 1;
 	private bool pressed = false;
@@ -75,7 +75,7 @@ public class FreeViewIntroManager : MonoBehaviour
     {
 		blink();
 
-		GameObject[] objs = GameObject.FindGameObjectsWithTag("Intro Manager");
+		/*GameObject[] objs = GameObject.FindGameObjectsWithTag("Intro Manager");
 		Debug.Log(objs.Length);
 		if (objs.Length > 1)
 		{
@@ -90,87 +90,21 @@ public class FreeViewIntroManager : MonoBehaviour
 			explanationText.SetActive(false);
 			GameObject.Destroy(this.gameObject);
 			DontDestroyOnLoad(objs[1]);
-		}
+		}*/
 
-
-		if (pageNumber == 1){
-			pageNumberText.text = "1";
-			
-			text[0].SetActive(true);
-		}
-		else if(pageNumber == 2){
-			pageNumberText.text = "2";
-			objects.SetActive(true);
-			time++;
-			
-			if(time == 100)
-				objectManager.GetComponent<ObjectManager>().SetActive(2);
-			else if(time == 200)
-				objectManager.GetComponent<ObjectManager>().SetActive(3);
-			else if(time == 300){
-				objectManager.GetComponent<ObjectManager>().SetActive(4);
-				time = 0;
+		string name = "";
+		if (name.Equals(""))
+		{
+			GameObject collect = GameObject.Find("CollectData");
+			if (collect != null)
+			{
+				CollectData data = collect.GetComponent<CollectData>() as CollectData;
+				name = data.playerName;
 			}
-			
-			text[0].SetActive(false);
-			text[1].SetActive(true);
 		}
-		else if(pageNumber == 3){
-			pageNumberText.text = "3";
-			objectManager.GetComponent<ObjectManager>().SetActive(4);
-			axes.SetActive(true);
-			text[1].SetActive(false);
-			text[2].SetActive(true);
-		}
-		else if(pageNumber == 4){
-			pageNumberText.text = "4";
-			text[2].SetActive(false);
-			text[3].SetActive(true);
-		}
-		else if(pageNumber == 5){
-			pageNumberText.text = "5";
-			text[4].SetActive(true);
-			blinkObject = xAxis;
-			
-			t.Rotate(new Vector3(1f, 0, 0), Space.World);
-		}
-		else if(pageNumber == 6){
-			pageNumberText.text = "6";
-			text[4].SetActive(false);
-			t.eulerAngles = new Vector3(0, 0, 0);
-			xAxis.SetActive(true);
-			pageNumber++;
-		}
-		else if(pageNumber == 7){
-			text[5].SetActive(true);
-			blinkObject = yAxis;
-			
-			t.Rotate(new Vector3(0, 0, 1f), Space.World);
-		}
-		else if(pageNumber == 8){
-			pageNumberText.text = "7";
-			text[5].SetActive(false);
-			t.eulerAngles = new Vector3(0, 0, 0);
-			yAxis.SetActive(true);
-			pageNumber++;
-		}
-		else if(pageNumber == 9){
-			text[6].SetActive(true);
-			blinkObject = zAxis;
-			
-			t.Rotate(new Vector3(0, 1f, 0), Space.World);
-		}
-		else if(pageNumber == 10){
-			pageNumberText.text = "8";
-			zAxis.SetActive(true);
-			text[3].SetActive(false);
-			text[6].SetActive(false);
-			text[7].SetActive(true);
-			objects.SetActive(false);
-			axes.SetActive(false);
-		}
-		
-		else {
+
+		if (PlayerPrefs.GetInt("RanIntro" + name) == 1)
+		{
 			isRun = true;
 			pageNumberObject.SetActive(false);
 			outOf.SetActive(false);
@@ -179,14 +113,117 @@ public class FreeViewIntroManager : MonoBehaviour
 			axes.SetActive(true);
 			hiddenLineDrawing.SetActive(true);
 			t.eulerAngles = new Vector3(0, 0, 0);
-
 			text[7].SetActive(false);
-			introManager.SetActive(true);
-			
-			Debug.Log("here");
-			DontDestroyOnLoad(this.gameObject);
+			introManager.SetActive(false);
+			explanationText.SetActive(false);
 		}
-		
+		else
+		{
+			if (pageNumber == 1)
+			{
+				pageNumberText.text = "1";
+
+				text[0].SetActive(true);
+			}
+			else if (pageNumber == 2)
+			{
+				pageNumberText.text = "2";
+				objects.SetActive(true);
+				time++;
+
+				if (time == 100)
+					objectManager.GetComponent<ObjectManager>().SetActive(2);
+				else if (time == 200)
+					objectManager.GetComponent<ObjectManager>().SetActive(3);
+				else if (time == 300)
+				{
+					objectManager.GetComponent<ObjectManager>().SetActive(4);
+					time = 0;
+				}
+
+				text[0].SetActive(false);
+				text[1].SetActive(true);
+			}
+			else if (pageNumber == 3)
+			{
+				pageNumberText.text = "3";
+				objectManager.GetComponent<ObjectManager>().SetActive(4);
+				axes.SetActive(true);
+				text[1].SetActive(false);
+				text[2].SetActive(true);
+			}
+			else if (pageNumber == 4)
+			{
+				pageNumberText.text = "4";
+				text[2].SetActive(false);
+				text[3].SetActive(true);
+			}
+			else if (pageNumber == 5)
+			{
+				pageNumberText.text = "5";
+				text[4].SetActive(true);
+				blinkObject = xAxis;
+
+				t.Rotate(new Vector3(1f, 0, 0), Space.World);
+			}
+			else if (pageNumber == 6)
+			{
+				pageNumberText.text = "6";
+				text[4].SetActive(false);
+				t.eulerAngles = new Vector3(0, 0, 0);
+				xAxis.SetActive(true);
+				pageNumber++;
+			}
+			else if (pageNumber == 7)
+			{
+				text[5].SetActive(true);
+				blinkObject = yAxis;
+
+				t.Rotate(new Vector3(0, 0, 1f), Space.World);
+			}
+			else if (pageNumber == 8)
+			{
+				pageNumberText.text = "7";
+				text[5].SetActive(false);
+				t.eulerAngles = new Vector3(0, 0, 0);
+				yAxis.SetActive(true);
+				pageNumber++;
+			}
+			else if (pageNumber == 9)
+			{
+				text[6].SetActive(true);
+				blinkObject = zAxis;
+
+				t.Rotate(new Vector3(0, 1f, 0), Space.World);
+			}
+			else if (pageNumber == 10)
+			{
+				pageNumberText.text = "8";
+				zAxis.SetActive(true);
+				text[3].SetActive(false);
+				text[6].SetActive(false);
+				text[7].SetActive(true);
+				objects.SetActive(false);
+				axes.SetActive(false);
+			}
+
+			else
+			{
+				isRun = true;
+				pageNumberObject.SetActive(false);
+				outOf.SetActive(false);
+				UI.SetActive(true);
+				objects.SetActive(true);
+				axes.SetActive(true);
+				hiddenLineDrawing.SetActive(true);
+				t.eulerAngles = new Vector3(0, 0, 0);
+
+				text[7].SetActive(false);
+				introManager.SetActive(true);
+
+				PlayerPrefs.SetInt("RanIntro" + name, 1);
+			}
+		}
 		
 		
 		/*

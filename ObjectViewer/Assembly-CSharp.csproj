@@ -71,11 +71,13 @@
     <Compile Include="Assets\Scripts\BooleanOperationScripts\GroundManager.cs" />
     <Compile Include="Assets\Scripts\BooleanOperationScripts\PassClipPlaneData.cs" />
     <Compile Include="Assets\Scripts\BooleanOperationScripts\PassHoleData.cs" />
+    <Compile Include="Assets\Scripts\CollectData.cs" />
     <Compile Include="Assets\Scripts\ControlScreen360Video.cs" />
     <Compile Include="Assets\Scripts\EscapeInput.cs" />
     <Compile Include="Assets\Scripts\ExplanationText.cs" />
     <Compile Include="Assets\Scripts\IsoView\IsoViewManager.cs" />
     <Compile Include="Assets\Scripts\IsoView\OrientationDetector.cs" />
+    <Compile Include="Assets\Scripts\LogIn.cs" />
     <Compile Include="Assets\Scripts\MainMenu.cs" />
     <Compile Include="Assets\Scripts\ObjectViewer\ControlsUI.cs" />
     <Compile Include="Assets\Scripts\ObjectViewer\CopyAnimationRotation.cs" />
