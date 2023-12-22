@@ -117,4 +117,6 @@ newY: the current Euler Y rotation value after the rotation
 
 newZ: the current Euler Z rotation value after the rotation
 
-When the user rotates the in-game object/shape, the change in rotation values is recorded. This is currently inconsistent and analysis should currently be done using key, mouse, and button presses.
+When the user rotates the in-game object/shape, the change in rotation values is recorded. 
+
+####This is currently inconsistent and analysis should currently be done using key, mouse, and button presses.
