@@ -87,7 +87,7 @@ When the user releases a keyboard key, it records which key was released.
 
 &nbsp;
 
-### Screen Height and Width
+### Screen Size
 
 #### ScreenSize screenWidth screenHeight
 
