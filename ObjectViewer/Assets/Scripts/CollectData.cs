@@ -33,12 +33,19 @@ public class CollectData : MonoBehaviour
         currentScene = "Login";
         pixelsWidth = Screen.width;
         pixelsHeight = Screen.height;
+        actions.Add(new ScreenSize(pixelsWidth, pixelsHeight, sessionNum));
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(pixelsWidth != Screen.width || pixelsHeight != Screen.height)
+        {
+            pixelsWidth = Screen.width;
+            pixelsHeight = Screen.height;
+            actions.Add(new ScreenSize(pixelsWidth, pixelsHeight, sessionNum));
+        }
+
         if (Input.GetMouseButtonDown(0) && sessionNum > 0) //when the mouse button is clicked, record it
         {
             Vector3 mp = Input.mousePosition;
@@ -320,6 +327,13 @@ public class CollectData : MonoBehaviour
             str += " " + act.newZ;
             //str += " " + act.newW;
         }
+        else if (action is ScreenSize)
+        {
+            ScreenSize act = action as ScreenSize;
+            str += " ScreenSize";
+            str += " " + act.screenWidth;
+            str += " " + act.screenHeight;
+        }
         return str;
     }
 
@@ -582,4 +596,25 @@ public class CollectData : MonoBehaviour
             session = sessionNum;
         }
     }
+
+    public class ScreenSize : PlayerAction //child class holds data of when a challenge answer is submitted
+    {
+        public int screenWidth;
+        public int screenHeight;
+        public ScreenSize(int width, int height, int sessionNum)
+        {
+            System.DateTime time = System.DateTime.Now;
+            year = time.Year;
+            month = time.Month;
+            day = time.Day;
+            hour = time.Hour;
+            minute = time.Minute;
+            second = time.Second;
+            milli = time.Millisecond;
+            screenWidth = width;
+            screenHeight = height;
+            session = sessionNum;
+        }
+    }
+
 }
