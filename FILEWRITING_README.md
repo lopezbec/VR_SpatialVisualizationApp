@@ -87,6 +87,18 @@ When the user releases a keyboard key, it records which key was released.
 
 &nbsp;
 
+### Screen Height and Width
+
+#### ScreenSize screenWidth screenHeight
+
+screenWidth: the current width of the user's screen in pixels
+
+screenHeight: the current height of the user's screen in pixels
+
+Records the user's screen size in pixels to be used for the location of mouse clicks relative to the game's field. Records at start and if it changes.
+
+&nbsp;
+
 ### Object Rotation
 
 #### ObjectRotation objectName pastX pastY pastZ newX newY newZ
@@ -105,4 +117,4 @@ newY: the current Euler Y rotation value after the rotation
 
 newZ: the current Euler Z rotation value after the rotation
 
-When the user rotates the in-game object/shape, the change in rotation values is recorded. This is currently inconsistent and analysis should currently be done using button presses.
+When the user rotates the in-game object/shape, the change in rotation values is recorded. This is currently inconsistent and analysis should currently be done using key, mouse, and button presses.
