@@ -88,6 +88,7 @@
      <Compile Include="Assets\Scripts\ObjectViewer\ObjectCombinator.cs" />
      <Compile Include="Assets\Scripts\ObjectViewer\ObjectManager.cs" />
      <Compile Include="Assets\Scripts\ObjectViewer\ObjectViewerRig.cs" />
+     <Compile Include="Assets\Scripts\ObjectViewer\PlaneHighlight.cs" />
      <Compile Include="Assets\Scripts\ObjectViewer\SceneSelect.cs" />
      <Compile Include="Assets\Scripts\ObjectViewer\SceneSelectUI.cs" />
      <Compile Include="Assets\Scripts\ObjectViewer\Screenshot.cs" />
