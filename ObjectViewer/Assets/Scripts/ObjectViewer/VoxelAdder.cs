@@ -30,7 +30,7 @@ public class VoxelAdder : MonoBehaviour
    
     void OnMouseUp()
     {
-        if (childObject != null) // Check if a side is highlighted
+        if (childObject != null && AddSubtractUIControls.selectedButton == "add") // Check if a side is highlighted
         {
             // Find the parent cube object (assuming it's the immediate parent)
             Transform parentCubeTransform = transform.parent;
@@ -86,7 +86,5 @@ public class VoxelAdder : MonoBehaviour
 
         return offset;
     }
-    void deleteIntersectingSide(int sideIndex) {
-    
-    }
+
 }
