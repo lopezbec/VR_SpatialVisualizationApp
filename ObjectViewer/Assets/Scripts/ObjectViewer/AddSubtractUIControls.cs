@@ -29,7 +29,7 @@ public class AddSubtractUIControls : MonoBehaviour
             selectedButton = clickedButtonName; // Update currently selected button
         }
 
-        Debug.Log("Button Clicked: " + clickedButtonName); // Log clicked button for debugging
+        //Debug.Log("Button Clicked: " + clickedButtonName); // Log clicked button for debugging
     }
 
     // Helper function to get button name based on clicked GameObject
