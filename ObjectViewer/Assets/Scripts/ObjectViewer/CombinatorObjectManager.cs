@@ -55,7 +55,8 @@ public class CombinatorObjectManager : MonoBehaviour
     }
 
     public void SetActive()
-    { // Sets the base object to be the active object active.
+    { // Sets the base object to be the active object active and return it.
         baseObject.SetActive(true);
     }
+
 }
