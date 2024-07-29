@@ -12,7 +12,7 @@ public class VoxelAdder : MonoBehaviour
     public Color highlightColor; // Set your desired highlight color (from original script)
 
     private GameObject collidingObject; //keeps track of side it is colliding with if colliding
-    /*private Collider objectCollider; //stores the objects own collider*/
+    private bool isCollided = false; //keeps track if side is colliding
 
     void Start()
     {
@@ -32,7 +32,7 @@ public class VoxelAdder : MonoBehaviour
    
     void OnMouseUp()
     {
-        if (childObject != null && AddSubtractUIControls.selectedButton == "add") // Check if a side is highlighted
+        if (childObject != null && AddSubtractUIControls.selectedButton == "add" && !isCollided) // Check if a side is highlighted
         {
             // Find the parent cube object (assuming it's the immediate parent)
             Transform parentCubeTransform = transform.parent;
@@ -51,7 +51,7 @@ public class VoxelAdder : MonoBehaviour
             // Set Child Cube position with offset (considering rotation)
             newVoxel.transform.GetChild(0).localPosition = transform.parent.localPosition + offset;
         }
-        else if (childObject != null && AddSubtractUIControls.selectedButton == "subtract" && gameObject.transform.parent.parent.name != "baseObject") // Check if a side is highlighted
+        else if (childObject != null && AddSubtractUIControls.selectedButton == "subtract" && gameObject.transform.parent.parent.name != "baseObject" && !isCollided) // Check if a side is highlighted
         {
             // Find the parent cube object (assuming it's the immediate parent)
             GameObject parentCube = gameObject.transform.parent.parent.gameObject;
@@ -69,17 +69,20 @@ public class VoxelAdder : MonoBehaviour
                 child.gameObject.SetActive(false);
             }
             collidingObject = other.gameObject;
+            isCollided = true;
         }
 
     }
     void OnDestroy() {
         if (collidingObject != null && collidingObject.activeInHierarchy)
         {
-            //enabling sides that were diasabled as a result of placing cube
+            //enabling sides that were disabled as a result of placing cube
             foreach (Transform child in collidingObject.transform)
             {
                 child.gameObject.SetActive(true);
             }
+
+            collidingObject.GetComponent<VoxelAdder>().SetCollided(false);
         }
     }
     Vector3 GetSideOffset(int sideIndex)
@@ -95,6 +98,10 @@ public class VoxelAdder : MonoBehaviour
         };
 
         return sideIndex >= 0 && sideIndex < offsets.Length ? offsets[sideIndex] : Vector3.zero;
+    }
+    public void SetCollided(bool collided)
+    {
+        isCollided = collided;
     }
 
 }
