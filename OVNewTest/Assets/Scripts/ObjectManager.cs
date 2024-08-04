@@ -5,15 +5,17 @@ using UnityEngine;
 public class ObjectManager : MonoBehaviour
 {
     public GameObject[] objects;
-    public int active = 4; 
+    public int active = 4;
     
     public bool activateKeyControl = true;
     public ObjectManager dontCopy;
     public int dontCopyActive;
     
     private string[] keys = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
-    
-    // Start activates the right object and desactivates all the others.
+
+    private bool hasStarted = false; // To track the initialization state
+
+    // Start activates the right object and deactivates all the others.
     void Start()
     {
         // Deactivate all objects first
@@ -54,11 +56,14 @@ public class ObjectManager : MonoBehaviour
                         temp = active;
                     }
 
-                    objects[active].SetActive(false);
-                    active = temp;
-                    objects[active].SetActive(true);
+                    if (hasStarted)
+                    {
+                        objects[active].SetActive(false);
+                        active = temp;
+                        objects[active].SetActive(true);
                     
-                    Debug.Log("Active object changed to: " + objects[active].name);
+                        Debug.Log("Active object changed to: " + objects[active].name);
+                    }
                 }
             }
         }
@@ -66,16 +71,27 @@ public class ObjectManager : MonoBehaviour
     
     public void SetActive(int i)
     {
-        if (i >= 0 && i < objects.Length) // If this is not less than 0 or more than the amount of objects in the array list
+        if (hasStarted && i >= 0 && i < objects.Length) // Only activate if hasStarted is true
         {
             objects[active].SetActive(false);
             active = i;
             objects[active].SetActive(true);
             Debug.Log("Active object set to: " + objects[active].name);
         }
+        else if (!hasStarted)
+        {
+            Debug.LogWarning("ObjectManager has not started yet.");
+        }
         else
         {
             Debug.LogError("Index out of bounds when trying to set active object.");
         }
+    }
+
+    // Method to initialize the object manager and start the process
+    public void StartObjectManager()
+    {
+        hasStarted = true;
+        Debug.Log("ObjectManager has started.");
     }
 }
