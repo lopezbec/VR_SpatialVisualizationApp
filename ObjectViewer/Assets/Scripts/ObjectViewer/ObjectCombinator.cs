@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
 using UnityEditor;
-using Debug = UnityEngine.Debug;
 using Random = UnityEngine.Random;
 
 public class ObjectCombinator : MonoBehaviour
@@ -111,11 +109,29 @@ public class ObjectCombinator : MonoBehaviour
             AlignPointsToCentroid(pointsA, centroidA);
             AlignPointsToCentroid(pointsB, centroidB);
 
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            //calculate hausdorff distance with all rotations
-            bool similarMesh = GetHausdorffResult(userCopy, meshA, pointsA, pointsB);
+            bool similarMesh = false;
+            
+            //rotate objects and try to match
+            List<Matrix4x4> rotationMatrices = Get90DegreeRotationMatrices();
+            foreach (var rotationMatrix in rotationMatrices)
+            {
+                // Apply rotation to the user object
+                RotateMesh(userCopy, rotationMatrix);
                 
+                // Update pointsA after rotation
+                pointsA = SamplePoints(meshA, (int)Math.Round(meshA.vertexCount * matchAccuracy));
+                AlignPointsToCentroid(pointsA, CalculateCentroid(pointsA));
+                
+                float hausdorffDistance = CalculateHausdorffDistance(pointsA, pointsB);
+                Debug.Log("Hausdorff Distance: " + hausdorffDistance);
+                
+                if (hausdorffDistance < minimumMatchPercentage)
+                {
+                    similarMesh = true;
+                    break;
+                }
+            }
+
             if (similarMesh) 
             {
                 Debug.Log("Meshes are similar.");
@@ -125,20 +141,9 @@ public class ObjectCombinator : MonoBehaviour
                 Debug.Log("Meshes are different.");
             }
             
-            
-            
             //Clean up Objects once done
-            // Destroy(userCopy);
-            // Destroy(referenceCopy);
-            
-            // Stop measuring elapsed time
-            stopwatch.Stop();
-
-            // Get the elapsed time as a TimeSpan
-            TimeSpan elapsedTime = stopwatch.Elapsed;
-
-            // Output the elapsed time
-            Debug.Log($"Elapsed time: {elapsedTime}");
+            Destroy(userCopy);
+            Destroy(referenceCopy);
             
         }
 
@@ -367,87 +372,44 @@ public class ObjectCombinator : MonoBehaviour
             points[i] -= centroid;
         }
     }
-    bool GetHausdorffResult(GameObject user, Mesh meshA, List<Vector3> pointsA, List<Vector3> pointsB)
+    List<Matrix4x4> Get90DegreeRotationMatrices()
     {
-        
-        int[,] angles = 
+        List<Matrix4x4> rotationMatrices = new List<Matrix4x4>();
+
+        // 90 degree increments around X, Y, and Z axes
+        int[] angles = { 0, 90, 180, 270 };
+
+        foreach (int x in angles)
         {
-            { 90, 0, 90 },
-            { 0, 0, 90 },
-            { 0, 0, 90 },
-            { 0, 0, 90 },
-
-            { 90, 0, 90 },
-            { 0, 0, 90 },
-            { 0, 0, 90 },
-            { 0, 0, 90 },
-
-            { 90, 0, 90 },
-            { 0, 0, 90 },
-            { 0, 0, 90 },
-            { 0, 0, 90 },
-
-            { 90, 0, 90 },
-            { 0, 0, 90 },
-            { 0, 0, 90 },
-            { 0, 0, 90 },
-
-            { 0, 90, 90 },
-            { 0, 0, 90 },
-            { 0, 0, 90 },
-            { 0, 0, 90 },
-
-            { 180, 0, 0 },
-            { 0, 0, 90 },
-            { 0, 0, 90 },
-            { 0, 0, 90 }
-        };
-
-        
-        
-        
-        for (int i = 0; i < angles.GetLength(0); i++)
-        {
-                Quaternion rotation = Quaternion.Euler(angles[i, 0], angles[i, 1], angles[i, 2]);
-                // Apply rotation to the user object
-                RotateMesh(user, rotation);
-                
-                // Update pointsA after rotation
-                pointsA = SamplePoints(meshA, (int)Math.Round(meshA.vertexCount * matchAccuracy));
-                AlignPointsToCentroid(pointsA, CalculateCentroid(pointsA));
-                
-                float hausdorffDistance = CalculateHausdorffDistance(pointsA, pointsB);
-                Debug.Log("Hausdorff Distance: " + hausdorffDistance + " angle: " + angles[i, 0] + " " + angles[i, 1] + " " + angles[i, 2]);
-                
-                if (hausdorffDistance < minimumMatchPercentage)
+            foreach (int y in angles)
+            {
+                foreach (int z in angles)
                 {
-                    return true;
+                    Matrix4x4 rotationMatrix = Matrix4x4.Rotate(Quaternion.Euler(x, y, z));
+                    rotationMatrices.Add(rotationMatrix);
                 }
-            
+            }
         }
-        
-        return false;
+
+        return rotationMatrices;
     }
 
-    void RotateMesh(GameObject obj, Quaternion rotation)
+    void RotateMesh(GameObject obj, Matrix4x4 rotationMatrix)
     {
-        if (obj.TryGetComponent<MeshFilter>(out MeshFilter meshFilter))
-        {
-            Mesh mesh = meshFilter.mesh;
-            Vector3[] vertices = mesh.vertices;
-            
-            
-            // Transform the vertices based on the rotation in world space
-            Matrix4x4 rotationMatrix = Matrix4x4.Rotate(rotation);
-            for (int i = 0; i < vertices.Length; i++)
-            {
-                vertices[i] = rotationMatrix.MultiplyPoint3x4(vertices[i]);
-            }
+        MeshFilter meshFilter = obj.GetComponent<MeshFilter>();
+        if (meshFilter == null) return;
 
-            mesh.vertices = vertices;
-            mesh.RecalculateBounds();
-            mesh.RecalculateNormals();
+        Mesh mesh = meshFilter.mesh;
+        Vector3[] vertices = mesh.vertices;
+
+        for (int i = 0; i < vertices.Length; i++)
+        {
+            vertices[i] = rotationMatrix.MultiplyPoint3x4(vertices[i]);
         }
+
+        mesh.vertices = vertices;
+        mesh.RecalculateBounds();
+        mesh.RecalculateNormals();
     }
     float CalculateHausdorffDistance(List<Vector3> pointsA, List<Vector3> pointsB)
     {
