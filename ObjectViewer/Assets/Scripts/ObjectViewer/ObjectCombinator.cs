@@ -67,11 +67,7 @@ public class ObjectCombinator : MonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.Return))
         {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            
             //ResetObjectRotations(userObject, referenceObject);
-            
             const float distanceMoved = 100.0f;
 
             // 2. Copy and Isolate Objects
@@ -115,8 +111,8 @@ public class ObjectCombinator : MonoBehaviour
             AlignPointsToCentroid(pointsA, centroidA);
             AlignPointsToCentroid(pointsB, centroidB);
 
-            
-            
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             //calculate hausdorff distance with all rotations
             bool similarMesh = GetHausdorffResult(userCopy, meshA, pointsA, pointsB);
                 
@@ -132,10 +128,9 @@ public class ObjectCombinator : MonoBehaviour
             
             
             //Clean up Objects once done
-            Destroy(userCopy);
-            Destroy(referenceCopy);
+            // Destroy(userCopy);
+            // Destroy(referenceCopy);
             
-                    
             // Stop measuring elapsed time
             stopwatch.Stop();
 
@@ -144,7 +139,6 @@ public class ObjectCombinator : MonoBehaviour
 
             // Output the elapsed time
             Debug.Log($"Elapsed time: {elapsedTime}");
-            
             
         }
 
@@ -432,14 +426,11 @@ public class ObjectCombinator : MonoBehaviour
             
         }
         
-        
         return false;
     }
 
     void RotateMesh(GameObject obj, Quaternion rotation)
     {
-        
-        
         if (obj.TryGetComponent<MeshFilter>(out MeshFilter meshFilter))
         {
             Mesh mesh = meshFilter.mesh;
@@ -457,40 +448,36 @@ public class ObjectCombinator : MonoBehaviour
             mesh.RecalculateBounds();
             mesh.RecalculateNormals();
         }
-        
-        
     }
     float CalculateHausdorffDistance(List<Vector3> pointsA, List<Vector3> pointsB)
     {
         float maxDistanceAB = MaxMinDistance(pointsA, pointsB);
         float maxDistanceBA = MaxMinDistance(pointsB, pointsA);
-        
         return Mathf.Max(maxDistanceAB, maxDistanceBA);
     }
+
     float MaxMinDistance(List<Vector3> source, List<Vector3> target)
     {
-        
-        
         float maxMinDistance = 0.0f;
 
         foreach (Vector3 pointA in source)
         {
-            float minDistanceSqr = float.MaxValue;
+            float minDistance = float.MaxValue;
             foreach (Vector3 pointB in target)
             {
-                float distanceSqr = (pointA - pointB).sqrMagnitude;
-                if (distanceSqr < minDistanceSqr)
+                float distance = Vector3.Distance(pointA, pointB);
+                if (distance < minDistance)
                 {
-                    minDistanceSqr = distanceSqr;
-                }
-                if (minDistanceSqr <= maxMinDistance)
-                {
-                    break; // Early termination
+                    minDistance = distance;
                 }
             }
-            maxMinDistance = Mathf.Max(maxMinDistance, minDistanceSqr);
+            //Debug.Log(minDistance);
+            if (minDistance > maxMinDistance)
+            {
+                maxMinDistance = minDistance;
+            }
         }
 
-        return Mathf.Sqrt(maxMinDistance); // Take square root only once at the end
+        return maxMinDistance;
     }
 }
