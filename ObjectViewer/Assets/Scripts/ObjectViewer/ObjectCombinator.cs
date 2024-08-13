@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEditor;
-using Random = UnityEngine.Random;
 
 public class ObjectCombinator : MonoBehaviour
 {
@@ -13,7 +11,6 @@ public class ObjectCombinator : MonoBehaviour
     public GameObject objectManager;
     public GameObject matchObjectManager;
     public float minimumMatchPercentage = 0.4f; // Threshold for similarity
-    public float matchAccuracy = 1.0f; // Number of sample points to check for similarity
 
     public float range = 0.1f;
 
@@ -66,26 +63,29 @@ public class ObjectCombinator : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Return))
         {
             //ResetObjectRotations(userObject, referenceObject);
-            const float distanceMoved = 100.0f;
+            var distanceMoved = 100.0f;
 
             // 2. Copy and Isolate Objects
-            GameObject userCopy = Instantiate(userObject);
-            GameObject referenceCopy = Instantiate(referenceObject, matchObjectTransform.position, Quaternion.identity);
+            var userCopy = Instantiate(userObject);
+            var referenceCopy = Instantiate(referenceObject, matchObjectTransform.position, Quaternion.identity);
 
             // 3. Clean Up Objects
-            //may not be needed but can enable if strange behaviour occurs
-            //DestroyComponentsOnObject(userCopy, new[] { "VoxelAdder", "EdgeRemover" });
-
-            
+            DestroyComponentsOnObject(userCopy, new[] { "VoxelAdder", "EdgeRemover" });
+            //may not need since instantiating children object
+            // Destroy(userCopy.GetComponent("CombinatorObjectManager"));
+            // Destroy(userCopy.GetComponent("ObjectViewerRig"));
             DestroyColliders(userCopy);
             DestroyDisabledObjects(userCopy);
-            
-            
+    
             Destroy(referenceCopy.GetComponent("ObjectManager"));
             Destroy(referenceCopy.GetComponent("CombinatorReferenceViewerRig"));
             
             DestroyEdges(userCopy);
             DestroyEdges(referenceCopy);
+            
+            //Start at 0 for mesh centering purposes
+            userCopy.transform.position = new Vector3(0,0,0);
+            referenceCopy.transform.position = new Vector3(0,0,0);
             
             // 4. Combine Sub-Meshes and Create OBBs
 
@@ -101,38 +101,18 @@ public class ObjectCombinator : MonoBehaviour
             Mesh meshB = referenceCopy.GetComponent<MeshFilter>().mesh;
             
             //6.1 Create Sample List of Vertex Points
-            List<Vector3> pointsA = SamplePoints(meshA, (int)Math.Round(meshA.vertexCount * matchAccuracy));
-            List<Vector3> pointsB = SamplePoints(meshB, (int)Math.Round(meshB.vertexCount * matchAccuracy));
+            List<Vector3> pointsA = SamplePoints(meshA, meshA.vertexCount);
+            List<Vector3> pointsB = SamplePoints(meshB, meshB.vertexCount);
             
             Vector3 centroidA = CalculateCentroid(pointsA);
             Vector3 centroidB = CalculateCentroid(pointsB);
             AlignPointsToCentroid(pointsA, centroidA);
             AlignPointsToCentroid(pointsB, centroidB);
 
-            bool similarMesh = false;
-            
-            //rotate objects and try to match
-            List<Matrix4x4> rotationMatrices = Get90DegreeRotationMatrices();
-            foreach (var rotationMatrix in rotationMatrices)
-            {
-                // Apply rotation to the user object
-                RotateMesh(userCopy, rotationMatrix);
-                
-                // Update pointsA after rotation
-                pointsA = SamplePoints(meshA, (int)Math.Round(meshA.vertexCount * matchAccuracy));
-                AlignPointsToCentroid(pointsA, CalculateCentroid(pointsA));
-                
-                float hausdorffDistance = CalculateHausdorffDistance(pointsA, pointsB);
-                Debug.Log("Hausdorff Distance: " + hausdorffDistance);
-                
-                if (hausdorffDistance < minimumMatchPercentage)
-                {
-                    similarMesh = true;
-                    break;
-                }
-            }
+            float hausdorffDistance = CalculateHausdorffDistance(pointsA, pointsB);
+            Debug.Log("Hausdorff Distance: " + hausdorffDistance);
 
-            if (similarMesh) 
+            if (hausdorffDistance < minimumMatchPercentage) 
             {
                 Debug.Log("Meshes are similar.");
             }
@@ -371,45 +351,6 @@ public class ObjectCombinator : MonoBehaviour
         {
             points[i] -= centroid;
         }
-    }
-    List<Matrix4x4> Get90DegreeRotationMatrices()
-    {
-        List<Matrix4x4> rotationMatrices = new List<Matrix4x4>();
-
-        // 90 degree increments around X, Y, and Z axes
-        int[] angles = { 0, 90, 180, 270 };
-
-        foreach (int x in angles)
-        {
-            foreach (int y in angles)
-            {
-                foreach (int z in angles)
-                {
-                    Matrix4x4 rotationMatrix = Matrix4x4.Rotate(Quaternion.Euler(x, y, z));
-                    rotationMatrices.Add(rotationMatrix);
-                }
-            }
-        }
-
-        return rotationMatrices;
-    }
-
-    void RotateMesh(GameObject obj, Matrix4x4 rotationMatrix)
-    {
-        MeshFilter meshFilter = obj.GetComponent<MeshFilter>();
-        if (meshFilter == null) return;
-
-        Mesh mesh = meshFilter.mesh;
-        Vector3[] vertices = mesh.vertices;
-
-        for (int i = 0; i < vertices.Length; i++)
-        {
-            vertices[i] = rotationMatrix.MultiplyPoint3x4(vertices[i]);
-        }
-
-        mesh.vertices = vertices;
-        mesh.RecalculateBounds();
-        mesh.RecalculateNormals();
     }
     float CalculateHausdorffDistance(List<Vector3> pointsA, List<Vector3> pointsB)
     {
