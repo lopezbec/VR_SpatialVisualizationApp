@@ -70,7 +70,6 @@
      <Compile Include="Assets\Scripts\IsoView\OrientationDetector.cs" />
      <Compile Include="Assets\Scripts\LogIn.cs" />
      <Compile Include="Assets\Scripts\MainMenu.cs" />
-     <Compile Include="Assets\Scripts\ObjectViewer\AddSubtractUIControls.cs" />
      <Compile Include="Assets\Scripts\ObjectViewer\CombinatorControlsUI.cs" />
      <Compile Include="Assets\Scripts\ObjectViewer\CombinatorObjectManager.cs" />
      <Compile Include="Assets\Scripts\ObjectViewer\CombinatorReferenceViewerRig.cs" />

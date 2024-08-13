@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "D:\\VR_SpatialVisualizationApp\\ObjectViewer\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7BF96BDE-7242-DC06-ED23-BBC7BD339AEA}|Assembly-CSharp.csproj|D:\\VR_SpatialVisualizationApp\\ObjectViewer\\assets\\scripts\\objectviewer\\voxeladder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{7BF96BDE-7242-DC06-ED23-BBC7BD339AEA}|Assembly-CSharp.csproj|d:\\vr_spatialvisualizationapp\\objectviewer\\assets\\scripts\\objectviewer\\voxeladder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7BF96BDE-7242-DC06-ED23-BBC7BD339AEA}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\objectviewer\\voxeladder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7BF96BDE-7242-DC06-ED23-BBC7BD339AEA}|Assembly-CSharp.csproj|d:\\vr_spatialvisualizationapp\\objectviewer\\assets\\scripts\\objectviewer\\addsubtractuicontrols.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7BF96BDE-7242-DC06-ED23-BBC7BD339AEA}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\objectviewer\\addsubtractuicontrols.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7BF96BDE-7242-DC06-ED23-BBC7BD339AEA}|Assembly-CSharp.csproj|D:\\VR_SpatialVisualizationApp\\ObjectViewer\\assets\\scripts\\objectviewer\\objectviewerrig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7BF96BDE-7242-DC06-ED23-BBC7BD339AEA}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\objectviewer\\objectviewerrig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7BF96BDE-7242-DC06-ED23-BBC7BD339AEA}|Assembly-CSharp.csproj|D:\\VR_SpatialVisualizationApp\\ObjectViewer\\assets\\scripts\\objectviewer\\combinatorcontrolsui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7BF96BDE-7242-DC06-ED23-BBC7BD339AEA}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\objectviewer\\combinatorcontrolsui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7BF96BDE-7242-DC06-ED23-BBC7BD339AEA}|Assembly-CSharp.csproj|D:\\VR_SpatialVisualizationApp\\ObjectViewer\\assets\\scripts\\objectviewer\\combinatorreferenceviewerrig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -38,7 +38,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -62,29 +62,28 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "AddSubtractUIControls.cs",
-              "DocumentMoniker": "D:\\VR_SpatialVisualizationApp\\ObjectViewer\\Assets\\Scripts\\ObjectViewer\\AddSubtractUIControls.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\ObjectViewer\\AddSubtractUIControls.cs",
-              "ToolTip": "D:\\VR_SpatialVisualizationApp\\ObjectViewer\\Assets\\Scripts\\ObjectViewer\\AddSubtractUIControls.cs",
-              "RelativeToolTip": "Assets\\Scripts\\ObjectViewer\\AddSubtractUIControls.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAAgAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-27T14:59:28.72Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
               "Title": "VoxelAdder.cs",
               "DocumentMoniker": "D:\\VR_SpatialVisualizationApp\\ObjectViewer\\Assets\\Scripts\\ObjectViewer\\VoxelAdder.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\ObjectViewer\\VoxelAdder.cs",
               "ToolTip": "D:\\VR_SpatialVisualizationApp\\ObjectViewer\\Assets\\Scripts\\ObjectViewer\\VoxelAdder.cs",
               "RelativeToolTip": "Assets\\Scripts\\ObjectViewer\\VoxelAdder.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAACMAAAA9AAAA",
+              "ViewState": "AQIAAAUAAAAAAAAAAAAQwDsAAAAoAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-06-25T14:56:09.494Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "CombinatorControlsUI.cs",
+              "DocumentMoniker": "D:\\VR_SpatialVisualizationApp\\ObjectViewer\\Assets\\Scripts\\ObjectViewer\\CombinatorControlsUI.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\ObjectViewer\\CombinatorControlsUI.cs",
+              "ToolTip": "D:\\VR_SpatialVisualizationApp\\ObjectViewer\\Assets\\Scripts\\ObjectViewer\\CombinatorControlsUI.cs",
+              "RelativeToolTip": "Assets\\Scripts\\ObjectViewer\\CombinatorControlsUI.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAABYAAAARAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-22T19:04:39.312Z"
             },
             {
               "$type": "Document",
@@ -100,7 +99,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "ObjectViewerRig.cs",
               "DocumentMoniker": "D:\\VR_SpatialVisualizationApp\\ObjectViewer\\Assets\\Scripts\\ObjectViewer\\ObjectViewerRig.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\ObjectViewer\\ObjectViewerRig.cs",
