@@ -1,23 +1,27 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class VoxelAdder : MonoBehaviour
 {
-    public string prefabPath; //prefab path
-    private GameObject voxelPrefab;// Prefab for the new voxel object
+    public string cubePrefabPath = "Prefabs/baseVoxelObject"; //prefab path 
+    public string inclinePrefabPath = "Prefabs/inclineVoxelObject_X_1"; //prefab path 
+    private GameObject cubeVoxelPrefab;// Prefab for the new voxel object 
+    private GameObject inclineVoxelPrefab;// Prefab for the new incline voxel object 
+    public Color inclineSelectionColor = new Color(1, 1, 1, 0.5f); // Semi-transparent white
+    
     public int sideIndex; //dictates which side is being pressed on
     public GameObject childObject; // Reference to the child object to highlight (from original script)
+    
     public Material originalMaterial; // Store the original color of the child (from original script)
     public Color highlightColor; // Set your desired highlight color (from original script)
 
-    private GameObject collidingObject; //keeps track of side it is colliding with if colliding
-    private bool isCollided = false; //keeps track if side is colliding
+    public GameObject collidingObject; //keeps track of side it is colliding with if colliding
+    public bool isCollided = false; //keeps track if side is colliding
 
     void Start()
     {
-        //must do this in order to copy prefab and not instance
-        voxelPrefab = Resources.Load<GameObject>(prefabPath);
+        //must do this in order to copy prefab and not the instance itself
+        cubeVoxelPrefab = Resources.Load<GameObject>(cubePrefabPath);
+        inclineVoxelPrefab = Resources.Load<GameObject>(inclinePrefabPath);
     }
     void OnMouseEnter()
     {
@@ -32,7 +36,8 @@ public class VoxelAdder : MonoBehaviour
    
     void OnMouseUp()
     {
-        if (childObject != null && AddSubtractUIControls.selectedButton == "add" && !isCollided) // Check if a side is highlighted
+        if (childObject != null && AddSubtractUIControls.selectedButton == "add" &&
+            !isCollided) // Check if a side is highlighted
         {
             // Find the parent cube object (assuming it's the immediate parent)
             Transform parentCubeTransform = transform.parent;
@@ -40,16 +45,42 @@ public class VoxelAdder : MonoBehaviour
             // Get positions of BaseVoxel and parent cube
             Vector3 baseVoxelPosition = parentCubeTransform.parent.position; // BaseVoxel position
 
-            // Create new voxel with parent cube's position and rotation
-            GameObject newVoxel = Instantiate(voxelPrefab, baseVoxelPosition, transform.parent.rotation);
+            GameObject newVoxel;
 
-            newVoxel.transform.parent = parentCubeTransform.parent.parent; // Set BaseVoxel as parent
+            if (BoxSlopeUIControls.selectedButton == "box")
+            {
+                // Create new voxel with parent cube's position and rotation
+                newVoxel = Instantiate(cubeVoxelPrefab, baseVoxelPosition, transform.parent.rotation);
+                
+                newVoxel.transform.parent = parentCubeTransform.parent.parent; // Set BaseVoxel as parent
 
-            // Calculate offset based on clicked side (assuming sideIndex is set elsewhere)
-            Vector3 offset = GetSideOffset(sideIndex);
+                // Calculate offset based on clicked side
+                Vector3 offset = GetSideOffset(sideIndex);
 
-            // Set Child Cube position with offset (considering rotation)
-            newVoxel.transform.GetChild(0).localPosition = transform.parent.localPosition + offset;
+                // Set Child Cube position with offset (considering rotation)
+                newVoxel.transform.GetChild(0).localPosition = transform.parent.localPosition + offset;
+
+            }
+            else if (BoxSlopeUIControls.selectedButton == "slope")
+            {
+                // Create new voxel with parent cube's position and rotation
+                newVoxel = Instantiate(inclineVoxelPrefab, baseVoxelPosition, transform.parent.rotation);
+                newVoxel.transform.parent = parentCubeTransform.parent.parent; // Set BaseVoxel as parent
+                
+                // Calculate offset based on clicked side
+                //TODO: SideIndex is not yet set for incline. Also there is some positioning issues when placing an object off incline
+                Vector3 offset = GetSideOffset(sideIndex);
+
+                // Set incline position with offset (considering rotation)
+                newVoxel.transform.localPosition = transform.parent.localPosition + offset - new Vector3(-1, 1, 1);
+            }
+            else
+            {
+                newVoxel = Instantiate(cubeVoxelPrefab, baseVoxelPosition, transform.parent.rotation);
+                Debug.Log("Something went wrong with the button selection");
+            }
+
+            
         }
         else if (childObject != null && AddSubtractUIControls.selectedButton == "subtract" && gameObject.transform.parent.parent.name != "baseObject" && !isCollided) // Check if a side is highlighted
         {
@@ -87,9 +118,9 @@ public class VoxelAdder : MonoBehaviour
     }
     Vector3 GetSideOffset(int sideIndex)
     {
-        float voxelSize = 1.0f; // Replace with your actual voxel prefab size
+        float voxelSize = 1.0f; // Voxel prefab size
         Vector3[] offsets = {
-            Vector3.back * voxelSize,  // Front face (backward movement)
+            Vector3.back * voxelSize, 
             Vector3.forward * voxelSize,
             Vector3.up * voxelSize,
             Vector3.down * voxelSize,

@@ -41,7 +41,8 @@ public class ObjectViewerRig : MonoBehaviour
     {		
 		
 		// Rotation controls.
-		if(!singleRotationMode)
+		//isRotating is only used in Object Combinator however it will be false by default so it should not affect the statements below
+		if(!singleRotationMode && !RotateInclines.isRotating)
 			for(int i = 0; i < inputs.Length; i++){
 				if(Input.GetKey(inputs[i])) {
 					if(!Input.GetKey(KeyCode.Space))
@@ -53,7 +54,7 @@ public class ObjectViewerRig : MonoBehaviour
 				}
 			}
 			
-		else
+		else if(!RotateInclines.isRotating)
 			for(int i = 0; i < inputs.Length; i++){
 				if(Input.GetKey(inputs[i]) && !objectHasRotated) {
 					t.Rotate(rotations[i], Space.World);

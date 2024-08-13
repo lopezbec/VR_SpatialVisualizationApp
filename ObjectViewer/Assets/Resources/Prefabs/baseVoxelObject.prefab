@@ -110,7 +110,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a9325a3f9dddad45b0b76a745b3cdf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabPath: Prefabs/baseVoxelObject
+  cubePrefabPath: Prefabs/baseVoxelObject
+  inclinePrefabPath: Prefabs/Triangles_Object_Template
+  inclineSelectionColor: {r: 1, g: 1, b: 1, a: 0.5}
   sideIndex: 5
   childObject: {fileID: 3402923669059252263}
   originalMaterial: {fileID: 2100000, guid: 0582cf9401c649e46abc0118d4abea3a, type: 2}
@@ -752,7 +754,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a9325a3f9dddad45b0b76a745b3cdf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabPath: Prefabs/baseVoxelObject
+  cubePrefabPath: Prefabs/baseVoxelObject
+  inclinePrefabPath: Prefabs/Triangles_Object_Template
+  inclineSelectionColor: {r: 1, g: 1, b: 1, a: 0.5}
   sideIndex: 4
   childObject: {fileID: 3402923668903493345}
   originalMaterial: {fileID: 2100000, guid: 90373cc7d34ddcd46ae3b80b6bfd7d92, type: 2}
@@ -975,7 +979,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a9325a3f9dddad45b0b76a745b3cdf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabPath: Prefabs/baseVoxelObject
+  cubePrefabPath: Prefabs/baseVoxelObject
+  inclinePrefabPath: Prefabs/Triangles_Object_Template
+  inclineSelectionColor: {r: 1, g: 1, b: 1, a: 0.5}
   sideIndex: 3
   childObject: {fileID: 3402923669724689354}
   originalMaterial: {fileID: 2100000, guid: 709a5f7a9fdcd4c4a86354818df5b3d1, type: 2}
@@ -1059,7 +1065,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a9325a3f9dddad45b0b76a745b3cdf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabPath: Prefabs/baseVoxelObject
+  cubePrefabPath: Prefabs/baseVoxelObject
+  inclinePrefabPath: Prefabs/Triangles_Object_Template
+  inclineSelectionColor: {r: 1, g: 1, b: 1, a: 0.5}
   sideIndex: 0
   childObject: {fileID: 3402923670301229708}
   originalMaterial: {fileID: 2100000, guid: b616a00f7bb33e3478712a9d98eccfed, type: 2}
@@ -1452,7 +1460,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a9325a3f9dddad45b0b76a745b3cdf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabPath: Prefabs/baseVoxelObject
+  cubePrefabPath: Prefabs/baseVoxelObject
+  inclinePrefabPath: Prefabs/Triangles_Object_Template
+  inclineSelectionColor: {r: 1, g: 1, b: 1, a: 0.5}
   sideIndex: 2
   childObject: {fileID: 3402923668667290932}
   originalMaterial: {fileID: 2100000, guid: 5950a0e75fd2a9143856f5f9901a9db1, type: 2}
@@ -3117,7 +3127,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a9325a3f9dddad45b0b76a745b3cdf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabPath: Prefabs/baseVoxelObject
+  cubePrefabPath: Prefabs/baseVoxelObject
+  inclinePrefabPath: Prefabs/Triangles_Object_Template
+  inclineSelectionColor: {r: 1, g: 1, b: 1, a: 0.5}
   sideIndex: 1
   childObject: {fileID: 3402923669766576656}
   originalMaterial: {fileID: 2100000, guid: 5184dccb90c3a3a4e9d1e2049a383f6b, type: 2}

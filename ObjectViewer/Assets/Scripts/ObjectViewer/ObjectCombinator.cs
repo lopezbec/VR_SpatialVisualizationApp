@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
-using UnityEditor;
 using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
 using Random = UnityEngine.Random;
@@ -15,19 +14,16 @@ public class ObjectCombinator : MonoBehaviour
     public GameObject completedText, imageToMatchObject, tryAnother, pressEnter;
     public GameObject objectManager;
     public GameObject matchObjectManager;
+    
     public float minimumMatchPercentage = 0.4f; // Threshold for similarity
     public float matchAccuracy = 1.0f; // Number of sample points to check for similarity
-
-    public float range = 0.1f;
 
     public int[]
         correctActiveObject, // Set from the inspector. Indicates which object should be active for each challenge.
         correctMatchingActiveObject; // Set from the inspector. Indicates which object the animation view should be set to.
-
-    private int animationState = 0; // 0 = delay before rotation, 1 = rotating, 2 = delay after rotation.
+    
     private GameObject collect;
     private Transform controlledObjectTransform, matchObjectTransform;
-    private int delayCounter = 0, initialDelay = 60, finalDelay = 60;
 
     private int numberOfChallenges = 3;
     private int progress = 0;
@@ -36,6 +32,7 @@ public class ObjectCombinator : MonoBehaviour
 
     private void Start()
     {
+        //I don't know what this is collecting but I'm too scared to remove it
         collect = GameObject.Find("CollectData");
         controlledObjectTransform = objectManager.GetComponent<Transform>();
 
@@ -63,9 +60,9 @@ public class ObjectCombinator : MonoBehaviour
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
+            
 
-            //ResetObjectRotations(userObject, referenceObject);
-
+            // 1. Random distance just to get the copies of objects away from the user
             const float distanceMoved = 100.0f;
 
             // 2. Copy and Isolate Objects
@@ -76,6 +73,12 @@ public class ObjectCombinator : MonoBehaviour
             //may not be needed but can enable if strange behaviour occurs
             //DestroyComponentsOnObject(userCopy, new[] { "VoxelAdder", "EdgeRemover" });
 
+            /*
+             * Below is an important part of optimizing this process. Later when we create one big mesh to represent the object
+             * For comparison we want the least number of vertices while still making the objects look similar.
+             * This is done by destroying the colliders, disabled objects, unused components, and ESPECIALLY edges.
+             * Unity is not able to create meshes over 65535 vertices so we have to remove as many unneeded objects as possible. 
+             */
 
             DestroyColliders(userCopy);
             DestroyDisabledObjects(userCopy);
@@ -87,8 +90,7 @@ public class ObjectCombinator : MonoBehaviour
             DestroyEdges(userCopy);
             DestroyEdges(referenceCopy);
 
-            // 4. Combine Sub-Meshes and Create OBBs
-
+            // 4. Combine Sub-Meshes to create overall mesh and Create OBBs
             CombineSubMeshes(userCopy);
             CombineSubMeshes(referenceCopy);
 
@@ -96,14 +98,14 @@ public class ObjectCombinator : MonoBehaviour
             userCopy.transform.position += Vector3.back * distanceMoved;
             referenceCopy.transform.position += Vector3.back * distanceMoved;
 
-            // 6. Align meshes based on centroids
+            //6 Create Sample List of Vertex Points (by default we are choosing the most accurate sample points by testing all points)
             Mesh meshA = userCopy.GetComponent<MeshFilter>().mesh;
             Mesh meshB = referenceCopy.GetComponent<MeshFilter>().mesh;
-
-            //6.1 Create Sample List of Vertex Points
+            
             List<Vector3> pointsA = SamplePoints(meshA, (int)Math.Round(meshA.vertexCount * matchAccuracy));
             List<Vector3> pointsB = SamplePoints(meshB, (int)Math.Round(meshB.vertexCount * matchAccuracy));
 
+            // 7. Align meshes based on centroids (fancy way of saying centering a mesh)
             Vector3 centroidA = CalculateCentroid(pointsA);
             Vector3 centroidB = CalculateCentroid(pointsB);
             AlignPointsToCentroid(pointsA, centroidA);
@@ -111,29 +113,21 @@ public class ObjectCombinator : MonoBehaviour
 
 
             //calculate hausdorff distance with all rotations
+            /*
+             * Take a single point from one mesh and compare the distance of that point to every other point on a second mesh
+             * return the smallest distance you found. Now do that with every point on the first mesh. Now that you have a
+             * list of minimum distances, take the largest of those distances. This is your Hausdorff distance.
+             */
             bool similarMesh = GetHausdorffResult(userCopy, meshA, pointsA, pointsB);
 
-            // if (similarMesh) 
-            // {
-            //     Debug.Log("Meshes are similar.");
-            // }
-            // else
-            // {
-            //     Debug.Log("Meshes are different.");
-            // }
             if (similarMesh)
             {
-                // If the object is approximately aligned to the target rotation for this challenge.
-
-                //controlledObject.eulerAngles = new Vector3(0, 0, 0);
 
                 if (progress <= numberOfChallenges)
                 {
                     progressBar[progress++].GetComponent<Image>().sprite = progressCircleFinished; // Set the next progress dot to the finished sprite.
 
                     DeleteAllExcept(objectManager.transform.GetChild(0).gameObject, "baseObject"); //reset user object
-                    //objectManager.GetComponent<ObjectManager>().SetActive(correctActiveObject[progress]); // Set the next correct object to be active.
-                    // matchObjectManager.GetComponent<ObjectManager>().SetActive(correctActiveObject[progress]);
                     
                     ResetObjectRotations(objectManager);
                     ResetObjectRotations(matchObjectManager); //resets rotation of user and reference
@@ -168,7 +162,6 @@ public class ObjectCombinator : MonoBehaviour
 
             // Output the elapsed time
             Debug.Log($"Elapsed time: {elapsedTime}");
-            //tryAnother.SetActive(true);
         }
     }
     
@@ -176,7 +169,6 @@ public class ObjectCombinator : MonoBehaviour
     private void ResetObjectRotations(GameObject Object)
     {
         Object.transform.eulerAngles = new Vector3(0, 0, 0);
-        //Object.position.Set(defaultPosition.x, defaultPosition.y, defaultPosition.z);
     }
     public void DeleteAllExcept(GameObject parentObject, string objectNameToKeep)
     {
@@ -191,19 +183,6 @@ public class ObjectCombinator : MonoBehaviour
             }
         }
     }
-    // private void DestroyComponentsOnObject(GameObject obj, string[] componentNames)
-    // {
-    //     foreach (var componentName in componentNames)
-    //     {
-    //         // Destroy components directly on the object
-    //         var component = obj.GetComponent(componentName);
-    //         if (component != null) Destroy(component);
-    //
-    //         // Recursively destroy components on children (handles nested hierarchies)
-    //         foreach (Transform child in obj.transform)
-    //             DestroyComponentsOnObject(child.gameObject, componentNames);
-    //     }
-    // }
 
     private void DestroyColliders(GameObject obj)
     {
@@ -263,7 +242,6 @@ public class ObjectCombinator : MonoBehaviour
     {
         // Get all MeshFilter components in children (recursive for nested objects)
         MeshFilter[] meshFilters = obj.GetComponentsInChildren<MeshFilter>();
-        //foreach (MeshFilter thing in meshFilters) Debug.Log(thing);
 
         // Combine meshes if there are more than one MeshFilter found
         if (meshFilters.Length > 1)
@@ -275,22 +253,16 @@ public class ObjectCombinator : MonoBehaviour
                 combine[i] = new CombineInstance(); // Initialize CombineInstance
                 combine[i].mesh = meshFilters[i].sharedMesh;
                 combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
-                // meshFilters[i].gameObject.SetActive(false);
             }
 
 
             MeshFilter meshFilter = obj.AddComponent<MeshFilter>();
             meshFilter.mesh = new Mesh();
-            meshFilter.mesh.CombineMeshes(combine, true); // Apply triangle optimization
-            // meshFilter.transform.position = new Vector3(0, 0, 0);
+            meshFilter.mesh.CombineMeshes(combine, true); // Apply triangle optimization. What that means I have no idea
             meshFilter.mesh.RecalculateBounds();
             meshFilter.mesh.RecalculateNormals();
             meshFilter.mesh.Optimize();
-
-
-            //Clear meshes from other child MeshFilters (optional)
-            // for (var i = 0; i < meshFilters.Length; i++) 
-            //     meshFilters[i].mesh = null;
+            
         }
     }
 
@@ -426,7 +398,7 @@ public class ObjectCombinator : MonoBehaviour
 
                 if (minDistanceSqr <= maxMinDistance)
                 {
-                    break; // Early termination
+                    break; // I don't know why this break statement works so well but it decreases the time for completion by 1000%
                 }
             }
 
