@@ -9,9 +9,10 @@ public class ProjectManager : MonoBehaviour
     public Sprite progressCircleFinished;
     public GameObject completedText, imageToMatchObject, tryAnother, pressEnter, objectManager;
     public GameObject matchObject;
-    public float range = 0.1f;
+    public float range = 0.2f;
     public Quaternion[] rotationToMatch;
     public int[] correctActiveObject, correctMatchingActiveObject;
+    public float rotationSpeed = 0.35f; // Adjust this value to make the rotation slower
 
     private int numberOfChallenges = 6;
     private int progress = 0;
@@ -48,8 +49,6 @@ public class ProjectManager : MonoBehaviour
             return;
         }
 
-        float speed = 1f;
-
         if (animationState == 0)
         {
             if (delayCounter >= initialDelay)
@@ -59,8 +58,8 @@ public class ProjectManager : MonoBehaviour
         }
         else if (animationState == 1)
         {
-            matchObjectTransform.rotation = Quaternion.RotateTowards(matchObjectTransform.rotation, rotationToMatch[progress], speed);
-
+            matchObjectTransform.rotation = Quaternion.RotateTowards(matchObjectTransform.rotation, rotationToMatch[progress], rotationSpeed);
+            // Compares to the objective transformation the object has to do for the animation ( not the match object)
             if (CompareQuaternions(matchObjectTransform.rotation, rotationToMatch[progress], 0.01f))
             {
                 animationState = 2;
@@ -82,6 +81,7 @@ public class ProjectManager : MonoBehaviour
 
     public void OnCheckCondition()
     {
+        Debug.Log("OnCheckCondition called.");
         CheckCondition();
     }
 
@@ -94,9 +94,10 @@ public class ProjectManager : MonoBehaviour
 
             if (progress < numberOfChallenges)
             {
-                progressBar[progress++].GetComponent<Image>().sprite = progressCircleFinished;
+                progressBar[progress].GetComponent<Image>().sprite = progressCircleFinished;
 
                 Debug.Log("Setting active objects for progress: " + progress);
+                progress++;
 
                 objectManager.GetComponent<ObjectManager>().SetActive(correctActiveObject[progress]);
                 matchObject.GetComponent<ObjectManager>().SetActive(correctMatchingActiveObject[progress]);
@@ -126,10 +127,11 @@ public class ProjectManager : MonoBehaviour
 
     private bool CompareQuaternions(Quaternion a, Quaternion b, float range)
     {
-        return (Mathf.Abs(a.x) <= Mathf.Abs(b.x) + range) && (Mathf.Abs(a.x) >= Mathf.Abs(b.x) - range) &&
-               (Mathf.Abs(a.y) <= Mathf.Abs(b.y) + range) && (Mathf.Abs(a.y) >= Mathf.Abs(b.y) - range) &&
-               (Mathf.Abs(a.z) <= Mathf.Abs(b.z) + range) && (Mathf.Abs(a.z) >= Mathf.Abs(b.z) - range) &&
-               (Mathf.Abs(a.w) <= Mathf.Abs(b.w) + range) && (Mathf.Abs(a.w) >= Mathf.Abs(b.w) - range);
+        bool result = (Mathf.Abs(a.x) <= Mathf.Abs(b.x) + range) && (Mathf.Abs(a.x) >= Mathf.Abs(b.x) - range) &&
+                      (Mathf.Abs(a.y) <= Mathf.Abs(b.y) + range) && (Mathf.Abs(a.y) >= Mathf.Abs(b.y) - range) &&
+                      (Mathf.Abs(a.z) <= Mathf.Abs(b.z) + range) && (Mathf.Abs(a.z) >= Mathf.Abs(b.z) - range) &&
+                      (Mathf.Abs(a.w) <= Mathf.Abs(b.w) + range) && (Mathf.Abs(a.w) >= Mathf.Abs(b.w) - range);
+        return result;
     }
 
     public void StartProcess()
