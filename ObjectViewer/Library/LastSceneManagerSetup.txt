@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Scenes/ObjectViewer/ObjectCombinator.unity
+- path: Assets/Scenes/ObjectViewer/CopyRotationAnimation.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0

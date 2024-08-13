@@ -70,9 +70,6 @@
      <Compile Include="Assets\Scripts\IsoView\OrientationDetector.cs" />
      <Compile Include="Assets\Scripts\LogIn.cs" />
      <Compile Include="Assets\Scripts\MainMenu.cs" />
-     <Compile Include="Assets\Scripts\ObjectViewer\CombinatorControlsUI.cs" />
-     <Compile Include="Assets\Scripts\ObjectViewer\CombinatorObjectManager.cs" />
-     <Compile Include="Assets\Scripts\ObjectViewer\CombinatorReferenceViewerRig.cs" />
      <Compile Include="Assets\Scripts\ObjectViewer\ControlsUI.cs" />
      <Compile Include="Assets\Scripts\ObjectViewer\CopyAnimationRotation.cs" />
      <Compile Include="Assets\Scripts\ObjectViewer\CopyImageRotation.cs" />
@@ -85,7 +82,6 @@
      <Compile Include="Assets\Scripts\ObjectViewer\MultipleChoice2Dto3D.cs" />
      <Compile Include="Assets\Scripts\ObjectViewer\MultipleChoice3Dto2D.cs" />
      <Compile Include="Assets\Scripts\ObjectViewer\OVExplanation.cs" />
-     <Compile Include="Assets\Scripts\ObjectViewer\ObjectCombinator.cs" />
      <Compile Include="Assets\Scripts\ObjectViewer\ObjectManager.cs" />
      <Compile Include="Assets\Scripts\ObjectViewer\ObjectViewerRig.cs" />
      <Compile Include="Assets\Scripts\ObjectViewer\SceneSelect.cs" />
