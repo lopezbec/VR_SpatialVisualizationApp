@@ -59,12 +59,5 @@ public class ObjectManager : MonoBehaviour
 			active = i;
 			objects[active].SetActive(true);
 	}
-	public GameObject SetAndReturnActive(int i){ // Sets the ith game object to be the active object active and returns the object.
-	
-		objects[active].SetActive(false);
-		active = i;
-		objects[active].SetActive(true);
-		return objects[active];
-	}
 	
 }
