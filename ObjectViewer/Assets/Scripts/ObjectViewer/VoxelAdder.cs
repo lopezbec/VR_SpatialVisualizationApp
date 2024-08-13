@@ -11,13 +11,11 @@ public class VoxelAdder : MonoBehaviour
     public Material originalMaterial; // Store the original color of the child (from original script)
     public Color highlightColor; // Set your desired highlight color (from original script)
 
-    private GameObject collidingObject; //keeps track of side it is colliding with if colliding
-
     void Start()
     {
         //must do this in order to copy prefab and not instance
         voxelPrefab = Resources.Load<GameObject>(prefabPath);
-        /*Debug.Log(voxelPrefab);*/
+        Debug.Log(voxelPrefab);
     }
     void OnMouseEnter()
     {
@@ -52,38 +50,12 @@ public class VoxelAdder : MonoBehaviour
             // Set Child Cube position with offset (considering rotation)
             newVoxel.transform.GetChild(0).localPosition = transform.parent.localPosition + (offset);
         }
-        else if (childObject != null && AddSubtractUIControls.selectedButton == "subtract" && gameObject.transform.parent.parent.name != "baseObject") // Check if a side is highlighted
-        {
-            // Find the parent cube object (assuming it's the immediate parent)
-            GameObject parentCube = gameObject.transform.parent.parent.gameObject;
-            Destroy(parentCube);
-        }
     }
     void OnTriggerEnter(Collider other) {
-        // disables child objects when any collider enters the trigger area
-        // Get all child GameObjects under "Side1", including nested ones
-        for (int i = 0; i < gameObject.transform.childCount; i++)
-        {
-            var child = gameObject.transform.GetChild(i).gameObject;
-            if (child != null)
-                child.SetActive(false);
-        }
-        //Debug.Log("disappear");
-        collidingObject = other.gameObject;
-
-
-    }
-    void OnDestroy() {
-        //enabling sides that were diasabled as a result of placing cube
-        if (collidingObject != null)
-        {
-            for (int i = 0; i < collidingObject.transform.childCount; i++)
-            {
-                var child = collidingObject.transform.GetChild(i).gameObject;
-                if (child != null)
-                    child.SetActive(true);
-            }
-        }
+        // Destroy this object and other when any collider enters the trigger area
+        Destroy(other.gameObject);
+        Destroy(gameObject);
+        Debug.Log("destroyed");
     }
     Vector3 GetSideOffset(int sideIndex)
     {
