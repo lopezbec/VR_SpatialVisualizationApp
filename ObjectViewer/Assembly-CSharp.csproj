@@ -88,11 +88,11 @@
      <Compile Include="Assets\Scripts\ObjectViewer\ObjectCombinator.cs" />
      <Compile Include="Assets\Scripts\ObjectViewer\ObjectManager.cs" />
      <Compile Include="Assets\Scripts\ObjectViewer\ObjectViewerRig.cs" />
+     <Compile Include="Assets\Scripts\ObjectViewer\PlaneHighlight.cs" />
      <Compile Include="Assets\Scripts\ObjectViewer\SceneSelect.cs" />
      <Compile Include="Assets\Scripts\ObjectViewer\SceneSelectUI.cs" />
      <Compile Include="Assets\Scripts\ObjectViewer\Screenshot.cs" />
      <Compile Include="Assets\Scripts\ObjectViewer\VisibilityDetectorControl.cs" />
-     <Compile Include="Assets\Scripts\ObjectViewer\VoxelAdder.cs" />
      <Compile Include="Assets\Scripts\ObjectViewer\rotationsToMatch.cs" />
      <Compile Include="Assets\Scripts\OrthoView\CurrentMatchObject.cs" />
      <Compile Include="Assets\Scripts\OrthoView\CurrentlySelectedImageAndObject.cs" />
