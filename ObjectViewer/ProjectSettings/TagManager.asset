@@ -7,8 +7,6 @@ TagManager:
   - Object
   - OrientationCube
   - Intro Manager
-  - SideObject
-  - SideOutline
   layers:
   - Default
   - TransparentFX
