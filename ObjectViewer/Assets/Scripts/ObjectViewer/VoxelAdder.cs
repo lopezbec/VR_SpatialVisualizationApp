@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class VoxelAdder : MonoBehaviour
 {
-    public string prefabPath; //prefab path
-    private GameObject voxelPrefab;// Prefab for the new voxel object
+    public GameObject voxelPrefab; // Prefab for the new voxel object
     public int sideIndex; //dictates which side is being pressed on
     public GameObject childObject; // Reference to the child object to highlight (from original script)
     public Material originalMaterial; // Store the original color of the child (from original script)
@@ -13,13 +12,14 @@ public class VoxelAdder : MonoBehaviour
 
     void Start()
     {
-        //must do this in order to copy prefab and not instance
-        voxelPrefab = Resources.Load<GameObject>(prefabPath);
-        Debug.Log(voxelPrefab);
+
     }
     void OnMouseEnter()
     {
         childObject.GetComponent<Renderer>().material.color = highlightColor;
+        
+        Debug.Log(highlightColor);
+        Debug.Log(originalMaterial.color);
     }
 
     void OnMouseExit()
@@ -28,7 +28,7 @@ public class VoxelAdder : MonoBehaviour
         
     }
    
-    void OnMouseUp()
+    void OnMouseDown()
     {
         if (childObject != null) // Check if a side is highlighted
         {
@@ -48,14 +48,8 @@ public class VoxelAdder : MonoBehaviour
             Vector3 offset = GetSideOffset(sideIndex);
 
             // Set Child Cube position with offset (considering rotation)
-            newVoxel.transform.GetChild(0).localPosition = transform.parent.localPosition + (offset);
+            newVoxel.transform.GetChild(0).localPosition += (offset);
         }
-    }
-    void OnTriggerEnter(Collider other) {
-        // Destroy this object and other when any collider enters the trigger area
-        Destroy(other.gameObject);
-        Destroy(gameObject);
-        Debug.Log("destroyed");
     }
     Vector3 GetSideOffset(int sideIndex)
     {
@@ -85,8 +79,5 @@ public class VoxelAdder : MonoBehaviour
         }
 
         return offset;
-    }
-    void deleteIntersectingSide(int sideIndex) {
-    
     }
 }

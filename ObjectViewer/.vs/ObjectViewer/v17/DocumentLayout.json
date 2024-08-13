@@ -68,7 +68,7 @@
               "RelativeDocumentMoniker": "Assets\\Scripts\\ObjectViewer\\VoxelAdder.cs",
               "ToolTip": "D:\\VR_SpatialVisualizationApp\\ObjectViewer\\Assets\\Scripts\\ObjectViewer\\VoxelAdder.cs",
               "RelativeToolTip": "Assets\\Scripts\\ObjectViewer\\VoxelAdder.cs",
-              "ViewState": "AQIAAAUAAAAAAAAAAAAQwDsAAAAoAAAA",
+              "ViewState": "AQIAABIAAAAAAAAAAAAowAsAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-06-25T14:56:09.494Z",
               "EditorCaption": ""
@@ -107,7 +107,8 @@
               "RelativeToolTip": "Assets\\Scripts\\ObjectViewer\\ObjectViewerRig.cs",
               "ViewState": "AQIAAFQAAAAAAAAAAAAowAQAAAAsAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-22T17:31:23.568Z"
+              "WhenOpened": "2024-06-22T17:31:23.568Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
