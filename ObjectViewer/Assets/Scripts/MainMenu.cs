@@ -23,6 +23,11 @@ public class MainMenu : MonoBehaviour
 	{
 		SceneManager.LoadScene("OrthoFreeView");
 	}
+    
+    public void PlayObjectCombinator()
+    	{
+    		SceneManager.LoadScene("ObjectCombinator");
+    	}
 	
 	public void ExitGame()
 	{

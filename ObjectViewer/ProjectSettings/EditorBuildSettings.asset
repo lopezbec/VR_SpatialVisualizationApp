@@ -27,6 +27,9 @@ EditorBuildSettings:
     path: Assets/Scenes/ObjectViewer/CopyRotationImageHard.unity
     guid: 4e90d942995904c44a495687caf5a4b7
   - enabled: 1
+    path: Assets/Scenes/ObjectViewer/ObjectCombinator.unity
+    guid: a912ce0798c5b214b8bba2e02f85a716
+  - enabled: 1
     path: Assets/Scenes/ObjectViewer/MultipleChoice2Dto3D.unity
     guid: cac5410c0652fc44981b1273475a5621
   - enabled: 1
