@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 using TMPro;
 
@@ -105,6 +106,7 @@ public class FreeViewIntroManager : MonoBehaviour
 
 		if (PlayerPrefs.GetInt("RanIntro" + name) == 1)
 		{
+			Debug.Log(PlayerPrefs.GetInt("RanIntro" + name));
 			isRun = true;
 			pageNumberObject.SetActive(false);
 			outOf.SetActive(false);
@@ -116,6 +118,12 @@ public class FreeViewIntroManager : MonoBehaviour
 			text[7].SetActive(false);
 			introManager.SetActive(false);
 			explanationText.SetActive(false);
+			
+			string nextScene = PlayerPrefs.GetString("NextScene"+name);
+			if (nextScene != "")
+			{
+				SceneManager.LoadScene(nextScene);
+			}
 		}
 		else
 		{
@@ -222,6 +230,12 @@ public class FreeViewIntroManager : MonoBehaviour
 				introManager.SetActive(true);
 
 				PlayerPrefs.SetInt("RanIntro" + name, 1);
+				
+				string nextScene = PlayerPrefs.GetString("NextScene"+name);
+				if (nextScene != "")
+				{
+					SceneManager.LoadScene(nextScene);
+				}
 			}
 		}
 		
