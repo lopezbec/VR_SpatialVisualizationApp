@@ -1,16 +1,25 @@
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
-
+using UnityEngine.InputSystem;
+// I need to add a toogle if statement
 public class FreezeOnEnter : MonoBehaviour
 {
     public float sphereRadius = 5.0f; // Radius of the spherical area
     public Transform sphereCenter; // Center of the sphere
-    private XRGrabInteractable grabInteractable;
+    public InputActionReference toggleGrabAction; // Reference to the input action
+    private bool isGrabbed = false; // Tracks if the object is grabbed
 
-    void Start()
+    void OnEnable()
     {
-        // Try to find the XRGrabInteractable component on the object
-        grabInteractable = GetComponent<XRGrabInteractable>();
+        // Subscribe to the input action
+        toggleGrabAction.action.performed += OnToggleGrab;
+        toggleGrabAction.action.Enable();
+    }
+
+    void OnDisable()
+    {
+        // Unsubscribe from the input action
+        toggleGrabAction.action.performed -= OnToggleGrab;
+        toggleGrabAction.action.Disable();
     }
 
     void OnTriggerEnter(Collider other)
@@ -18,7 +27,7 @@ public class FreezeOnEnter : MonoBehaviour
         Rigidbody rb = other.attachedRigidbody;
 
         // Check if the object has a Rigidbody, is within the spherical area, and is not being grabbed
-        if (rb != null && IsWithinSphere(other.transform.position) && !IsBeingGrabbed())
+        if (rb != null && IsWithinSphere(other.transform.position) && !isGrabbed)
         {
             // Freeze the object's velocity and angular velocity
             rb.velocity = Vector3.zero;
@@ -49,10 +58,11 @@ public class FreezeOnEnter : MonoBehaviour
         return Vector3.Distance(position, sphereCenter.position) <= sphereRadius;
     }
 
-    // Helper method to check if the object is currently being grabbed
-    bool IsBeingGrabbed()
+    // Callback for the input action to toggle the grabbed state
+    void OnToggleGrab(InputAction.CallbackContext context)
     {
-        return grabInteractable != null && grabInteractable.isSelected;
+        isGrabbed = !isGrabbed;
+        Debug.Log("Object Grabbed: " + isGrabbed);
     }
 
     // Helper method to snap angles to the nearest 90 degrees

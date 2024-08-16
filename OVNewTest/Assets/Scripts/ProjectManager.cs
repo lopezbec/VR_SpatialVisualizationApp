@@ -7,7 +7,8 @@ public class ProjectManager : MonoBehaviour
     public bool hasStarted = false;
     public GameObject[] progressBar;
     public Sprite progressCircleFinished;
-    public GameObject completedText, imageToMatchObject, tryAnother, pressEnter, objectManager;
+    public GameObject objectManager;
+    // public GameObject completedText;
     public GameObject matchObject;
     public float range = 0.2f;
     public Quaternion[] rotationToMatch;
@@ -26,18 +27,18 @@ public class ProjectManager : MonoBehaviour
     {
         Debug.Log("Starting ProjectManager script.");
         collect = GameObject.Find("CollectData");
-        controlledObject = objectManager.GetComponent<Transform>();
         numberOfChallenges = rotationToMatch.Length + 1; 
 
         Debug.Log("Number of challenges: " + numberOfChallenges);
         Debug.Log("Setting initial active objects.");
-        
+        // Activate the right objects 
         objectManager.GetComponent<ObjectManager>().SetActive(correctActiveObject[progress]); 
         matchObject.GetComponent<ObjectManager>().SetActive(correctMatchingActiveObject[progress]);
-
+    
         matchObjectTransform = matchObject.GetComponent<Transform>();
         matchObjectTransform.eulerAngles = new Vector3(0, 0, 0);
 
+        controlledObject = objectManager.transform.GetChild(correctActiveObject[progress]).GetComponent<Transform>();
         for (int i = 0; i < progressBar.Length; i++)
             progressBar[i].SetActive(i < numberOfChallenges - 1);
     }
@@ -48,7 +49,11 @@ public class ProjectManager : MonoBehaviour
         {
             return;
         }
-
+        //    // TESTING ROTATION // COMMENT THIS AFTER TESTING 
+        //     Debug.Log("Before Rotation: " + controlledObject.rotation.eulerAngles);
+        //     controlledObject.Rotate(Vector3.up, 10f * Time.deltaTime); // Example rotation
+        //     Debug.Log("After Rotation: " + controlledObject.rotation.eulerAngles);
+        //     // END OF TESTING 
         if (animationState == 0)
         {
             if (delayCounter >= initialDelay)
@@ -85,53 +90,83 @@ public class ProjectManager : MonoBehaviour
         CheckCondition();
     }
 
-    private void CheckCondition()
+private void CheckCondition()
+{
+    if (CompareQuaternions(controlledObject.rotation, rotationToMatch[progress], range))
     {
-        if (CompareQuaternions(controlledObject.rotation, rotationToMatch[progress], range))
+        Debug.Log("Rotation matched. Proceeding to the next challenge.");
+        controlledObject.eulerAngles = new Vector3(0, 0, 0);
+
+        if (progress < numberOfChallenges)
         {
-            Debug.Log("Rotation matched. Proceeding to next challenge.");
-            controlledObject.eulerAngles = new Vector3(0, 0, 0);
-
-            if (progress < numberOfChallenges)
+            if (progressBar[progress] == null)
             {
-                progressBar[progress].GetComponent<Image>().sprite = progressCircleFinished;
+                Debug.LogError("progressBar[" + progress + "] is null.");
+                return;
+            }
 
-                Debug.Log("Setting active objects for progress: " + progress);
-                progress++;
+            Image imageComponent = progressBar[progress].GetComponent<Image>();
+            if (imageComponent == null)
+            {
+                Debug.LogError("No Image component found on progressBar[" + progress + "].");
+                return;
+            }
 
-                objectManager.GetComponent<ObjectManager>().SetActive(correctActiveObject[progress]);
-                matchObject.GetComponent<ObjectManager>().SetActive(correctMatchingActiveObject[progress]);
+            if (progressCircleFinished == null)
+            {
+                Debug.LogError("progressCircleFinished sprite is not assigned.");
+                return;
+            }
 
-                if (progress >= numberOfChallenges - 1)
-                {
-                    Debug.Log("All challenges completed.");
-                    completedText.SetActive(true);
-                    imageToMatchObject.SetActive(false);
-                    pressEnter.SetActive(false);
-                    animationState = -1;
-                }
-                else
-                {
-                    animationState = 0;
-                    delayCounter = 0;
-                    matchObjectTransform.eulerAngles = new Vector3(0, 0, 0);
-                }
+            imageComponent.sprite = progressCircleFinished;
+
+            Debug.Log("Setting active objects for progress: " + progress);
+            progress++;
+
+            // Set active objects
+            objectManager.GetComponent<ObjectManager>().SetActive(correctActiveObject[progress]);
+            matchObject.GetComponent<ObjectManager>().SetActive(correctMatchingActiveObject[progress]);
+
+            // Update controlledObject to the new active child
+            controlledObject = objectManager.transform.GetChild(correctActiveObject[progress]).GetComponent<Transform>();
+        
+            Debug.Log("New controlled object set: " + controlledObject.name);
+
+            if (progress >= numberOfChallenges - 1)
+            {
+                Debug.Log("All challenges completed.");
+                animationState = -1;
+            }
+            else
+            {
+                animationState = 0;
+                delayCounter = 0;
+                matchObjectTransform.eulerAngles = new Vector3(0, 0, 0);
             }
         }
-        else
-        {
-            Debug.Log("Rotation did not match. Try again.");
-            tryAnother.SetActive(true);
-        }
     }
-
-    private bool CompareQuaternions(Quaternion a, Quaternion b, float range)
+    else
     {
-        bool result = (Mathf.Abs(a.x) <= Mathf.Abs(b.x) + range) && (Mathf.Abs(a.x) >= Mathf.Abs(b.x) - range) &&
-                      (Mathf.Abs(a.y) <= Mathf.Abs(b.y) + range) && (Mathf.Abs(a.y) >= Mathf.Abs(b.y) - range) &&
-                      (Mathf.Abs(a.z) <= Mathf.Abs(b.z) + range) && (Mathf.Abs(a.z) >= Mathf.Abs(b.z) - range) &&
-                      (Mathf.Abs(a.w) <= Mathf.Abs(b.w) + range) && (Mathf.Abs(a.w) >= Mathf.Abs(b.w) - range);
-        return result;
+        Vector3 rotationDifference = CalculateRotationDifference(controlledObject.rotation, rotationToMatch[progress]);
+        Debug.Log("Rotation did not match. Try again. Required rotation difference: " + rotationDifference);
+    }
+}
+
+    private bool CompareQuaternions(Quaternion a, Quaternion b, float allowedAngleDifference)
+{
+    float angle = Quaternion.Angle(a, b);
+    return angle <= allowedAngleDifference;
+}
+
+    private Vector3 CalculateRotationDifference(Quaternion currentRotation, Quaternion targetRotation)
+    {
+        // Calculate the difference quaternion
+        Quaternion difference = Quaternion.Inverse(currentRotation) * targetRotation;
+
+        // Convert the difference quaternion to Euler angles
+        Vector3 differenceEulerAngles = difference.eulerAngles;
+
+        return differenceEulerAngles;
     }
 
     public void StartProcess()
