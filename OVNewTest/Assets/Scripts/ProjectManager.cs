@@ -1,16 +1,20 @@
+using System.ComponentModel.Design;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class ProjectManager : MonoBehaviour
 {
     public bool hasStarted = false;
     public GameObject[] progressBar;
     public Sprite progressCircleFinished;
-    public GameObject[] controlledObjects; // List of objects to control directly
-    public GameObject[] matchingObjects; // List of matching objects directly
+    public GameObject objectManager;
+    public GameObject matchObject;
     public float range = 0.2f;
     public Quaternion[] rotationToMatch;
     public int activeObjects = 5; 
+    public int[] correctActiveObject;
+    public int[] correctMatchingActiveObject;
     public float rotationSpeed = 0.35f; // Adjust this value to make the rotation slower
 
     private int numberOfChallenges = 6;
@@ -24,21 +28,20 @@ public class ProjectManager : MonoBehaviour
     void Start()
     {
         Debug.Log("Starting ProjectManager script.");
-
+        correctActiveObject = new int[activeObjects];
+        correctMatchingActiveObject = new int[activeObjects];
         collect = GameObject.Find("CollectData");
         numberOfChallenges = rotationToMatch.Length + 1; 
 
         Debug.Log("Number of challenges: " + numberOfChallenges);
         Debug.Log("Setting initial active objects.");
         
-        // Activate the right objects using direct references
         SetActiveObjects(progress);
-    
-        matchObjectTransform = matchingObjects[progress].transform;
-        matchObjectTransform.eulerAngles = new Vector3(0, 0, 0);
 
-        controlledObject = controlledObjects[progress].transform;
+        matchObjectTransform = matchObject.GetComponent<Transform>();
+        matchObjectTransform.eulerAngles = Vector3.zero;
 
+        controlledObject = objectManager.transform.GetChild(correctActiveObject[progress]).GetComponent<Transform>();
         for (int i = 0; i < progressBar.Length; i++)
             progressBar[i].SetActive(i < numberOfChallenges - 1);
     }
@@ -60,7 +63,6 @@ public class ProjectManager : MonoBehaviour
         else if (animationState == 1)
         {
             matchObjectTransform.rotation = Quaternion.RotateTowards(matchObjectTransform.rotation, rotationToMatch[progress], rotationSpeed);
-
             if (CompareQuaternions(matchObjectTransform.rotation, rotationToMatch[progress], 0.01f))
             {
                 animationState = 2;
@@ -73,7 +75,7 @@ public class ProjectManager : MonoBehaviour
             {
                 animationState = 0;
                 delayCounter = 0;
-                matchObjectTransform.eulerAngles = new Vector3(0, 0, 0);
+                matchObjectTransform.eulerAngles = Vector3.zero;
             }
             else
                 delayCounter++;
@@ -91,7 +93,7 @@ public class ProjectManager : MonoBehaviour
         if (CompareQuaternions(controlledObject.rotation, rotationToMatch[progress], range))
         {
             Debug.Log("Rotation matched. Proceeding to the next challenge.");
-            controlledObject.eulerAngles = new Vector3(0, 0, 0);
+            controlledObject.eulerAngles = Vector3.zero;
 
             if (progress < numberOfChallenges)
             {
@@ -116,7 +118,7 @@ public class ProjectManager : MonoBehaviour
 
                 imageComponent.sprite = progressCircleFinished;
                    
-                Debug.Log("Previous controlled object set to: " + controlledObject.name);
+                Debug.Log("Previous controlled object set to: " + controlledObject.name + " at index: " + correctActiveObject[progress]);
                 
                 progress++;
                 Debug.Log("Progress value after increment: " + progress);
@@ -126,13 +128,15 @@ public class ProjectManager : MonoBehaviour
                     Debug.Log("Setting active objects for progress: " + progress);
                     SetActiveObjects(progress);
 
-                    // Update controlledObject to the new active child
-                    controlledObject = controlledObjects[progress].transform;
+                    controlledObject = objectManager.transform.GetChild(correctActiveObject[progress]).GetComponent<Transform>();
+                    matchObjectTransform = matchObject.GetComponent<Transform>();
+
                     Debug.Log("New controlled object set to: " + controlledObject.name);
+                    Debug.Log("New match object set to: " + matchObjectTransform.name);
 
                     animationState = 0;
                     delayCounter = 0;
-                    matchObjectTransform.eulerAngles = new Vector3(0, 0, 0);
+                    matchObjectTransform.eulerAngles = Vector3.zero;
                 }
                 else
                 {
@@ -161,27 +165,37 @@ public class ProjectManager : MonoBehaviour
         return differenceEulerAngles;
     }
 
-    private void SetActiveObjects(int index)
-    {
-        // Deactivate all objects first
-        foreach (GameObject obj in controlledObjects)
-        {
-            obj.SetActive(false);
-        }
-
-        foreach (GameObject obj in matchingObjects)
-        {
-            obj.SetActive(false);
-        }
-
-        // Activate the current objects
-        controlledObjects[index].SetActive(true);
-        matchingObjects[index].SetActive(true);
-    }
-
     public void StartProcess()
     {
         Debug.Log("Starting process.");
         hasStarted = true;
     }
+
+    private void SetActiveObjects(int index)
+{
+    // Deactivate all objects in the object manager
+    foreach (Transform child in objectManager.transform)
+    {
+        child.gameObject.SetActive(false);
+    }
+
+    // Activate the current objects
+    GameObject activeControlledObject = objectManager.transform.GetChild(correctActiveObject[index]).gameObject;
+    GameObject activeMatchingObject = matchObject.transform.GetChild(correctMatchingActiveObject[index]).gameObject;
+
+    activeControlledObject.SetActive(true);
+    activeMatchingObject.SetActive(true);
+
+    // Reset the rotation of the activated controlled object
+    Transform activeControlledObjectTransform = activeControlledObject.transform;
+    activeControlledObjectTransform.localRotation = Quaternion.identity;
+
+    // Reset the rotation of the activated matching object
+    matchObjectTransform = activeMatchingObject.transform;
+    matchObjectTransform.localRotation = Quaternion.identity;
+
+    Debug.Log("Activated objects for index " + index + ": " + activeControlledObject.name 
+        + " and " + activeMatchingObject.name);
+}
+
 }
