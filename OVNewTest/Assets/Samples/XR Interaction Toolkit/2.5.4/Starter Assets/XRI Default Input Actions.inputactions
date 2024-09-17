@@ -703,7 +703,7 @@
                     "path": "<XRController>{LeftHand}/{PrimaryButton}",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Generic XR Controller",
                     "action": "OpenMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -1270,6 +1270,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "OpenSceneMenu",
+                    "type": "Button",
+                    "id": "8b460b25-1dc5-4143-94cb-44aa94ecb8fc",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1503,6 +1512,28 @@
                     "action": "Grip Rotation",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "120e1278-c5f2-4201-bf23-d591d49b7e90",
+                    "path": "<XRController>{RightHand}/primaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Generic XR Controller",
+                    "action": "OpenSceneMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cc137b82-0ca3-4203-b634-2355b7748870",
+                    "path": "<XRController>{RightHand}/secondaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Generic XR Controller",
+                    "action": "OpenSceneMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -1514,7 +1545,7 @@
                     "name": "Select",
                     "type": "Button",
                     "id": "ac96c10b-c955-4a46-8e67-bf16bc069b53",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false

@@ -8,8 +8,8 @@ public class ProjectManager : MonoBehaviour
     public bool hasStarted = false;
     public GameObject[] progressBar;
     public Sprite progressCircleFinished;
-    public GameObject objectManager;
-    public GameObject matchObject;
+    public GameObject objectManager,matchObject;
+    public GameObject challengesAllCompleted; 
     public float range = 0.2f;
     public Quaternion[] rotationToMatch;
     public int activeObjects = 5; 
@@ -142,6 +142,7 @@ public class ProjectManager : MonoBehaviour
                 {
                     Debug.Log("All challenges completed.");
                     animationState = -1;
+
                 }
             }
         }
