@@ -7,6 +7,11 @@ To see some examples of the practice modules for that idea, try the links below.
 
 #### [Video how to run Unity Application](https://youtu.be/yHaU-V19BLE)
 
+#### VR version  v0.1
+https://youtu.be/ls-ZoZREbnI
+
+https://youtu.be/BMdY2FByGR8
+
 #### Hand Tracking v0.2
 https://www.youtube.com/watch?v=yP_OwQmPLdA&feature=emb_logo
 
