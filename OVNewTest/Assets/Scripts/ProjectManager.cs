@@ -1,3 +1,4 @@
+
 using System.ComponentModel.Design;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,7 +17,6 @@ public class ProjectManager : MonoBehaviour
     public int[] correctActiveObject;
     public int[] correctMatchingActiveObject;
     public float rotationSpeed = 0.35f; // Adjust this value to make the rotation slower
-
     private int numberOfChallenges = 6;
     private int progress = 0;
     private Transform controlledObject, matchObjectTransform;
@@ -82,6 +82,7 @@ public class ProjectManager : MonoBehaviour
         }
     }
 
+
     public void OnCheckCondition()
     {
         Debug.Log("OnCheckCondition called.");
@@ -141,8 +142,7 @@ public class ProjectManager : MonoBehaviour
                 else
                 {
                     Debug.Log("All challenges completed.");
-                    animationState = -1;
-
+                    TriggerSuccessState(); // Trigger success state at the final stage
                 }
             }
         }
@@ -151,6 +151,39 @@ public class ProjectManager : MonoBehaviour
             Vector3 rotationDifference = CalculateRotationDifference(controlledObject.rotation, rotationToMatch[progress]);
             Debug.Log("Rotation did not match. Try again. Required rotation difference: " + rotationDifference);
         }
+    }
+
+    private void TriggerSuccessState()
+    {
+        Debug.Log("Success! All challenges are completed.");
+
+        // Activate the success object (e.g., canvas with success message)
+        if (challengesAllCompleted != null)
+        {
+            challengesAllCompleted.SetActive(true);
+        }
+
+        // Hide all objects in the object manager
+        HideAllActiveObjects();
+
+        // Stop further updates
+        animationState = -1;
+        hasStarted = false;
+    }
+
+    private void HideAllActiveObjects()
+    {
+        // Deactivate all objects in the object manager and match object
+        foreach (Transform child in objectManager.transform)
+        {
+            child.gameObject.SetActive(false);
+        }
+        foreach (Transform child in matchObject.transform)
+        {
+            child.gameObject.SetActive(false);
+        }
+
+        Debug.Log("All active objects are now hidden.");
     }
 
     private bool CompareQuaternions(Quaternion a, Quaternion b, float allowedAngleDifference)
@@ -173,30 +206,35 @@ public class ProjectManager : MonoBehaviour
     }
 
     private void SetActiveObjects(int index)
-{
-    // Deactivate all objects in the object manager
-    foreach (Transform child in objectManager.transform)
     {
-        child.gameObject.SetActive(false);
+        // Deactivate all objects in the object manager
+        foreach (Transform child in objectManager.transform)
+        {
+            child.gameObject.SetActive(false);
+        }
+
+        // Activate the current objects
+        GameObject activeControlledObject = objectManager.transform.GetChild(correctActiveObject[index]).gameObject;
+        GameObject activeMatchingObject = matchObject.transform.GetChild(correctMatchingActiveObject[index]).gameObject;
+
+        activeControlledObject.SetActive(true);
+        activeMatchingObject.SetActive(true);
+
+        // Reset the rotation of the activated controlled object
+        Transform activeControlledObjectTransform = activeControlledObject.transform;
+        activeControlledObjectTransform.localRotation = Quaternion.identity;
+
+        // Reset the rotation of the activated matching object
+        matchObjectTransform = activeMatchingObject.transform;
+        matchObjectTransform.localRotation = Quaternion.identity;
+
+        Debug.Log("Activated objects for index " + index + ": " + activeControlledObject.name 
+            + " and " + activeMatchingObject.name);
     }
 
-    // Activate the current objects
-    GameObject activeControlledObject = objectManager.transform.GetChild(correctActiveObject[index]).gameObject;
-    GameObject activeMatchingObject = matchObject.transform.GetChild(correctMatchingActiveObject[index]).gameObject;
-
-    activeControlledObject.SetActive(true);
-    activeMatchingObject.SetActive(true);
-
-    // Reset the rotation of the activated controlled object
-    Transform activeControlledObjectTransform = activeControlledObject.transform;
-    activeControlledObjectTransform.localRotation = Quaternion.identity;
-
-    // Reset the rotation of the activated matching object
-    matchObjectTransform = activeMatchingObject.transform;
-    matchObjectTransform.localRotation = Quaternion.identity;
-
-    Debug.Log("Activated objects for index " + index + ": " + activeControlledObject.name 
-        + " and " + activeMatchingObject.name);
 }
 
-}
+   
+ 
+
+
