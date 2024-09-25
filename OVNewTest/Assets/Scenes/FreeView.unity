@@ -37774,7 +37774,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5931261929072142794, guid: 32596b0044fbb25429f7e395df292fb3, type: 3}
       propertyPath: m_Text
-      value: Copy Rotation As To
+      value: Copy the rotation of the Object
+      objectReference: {fileID: 0}
+    - target: {fileID: 5931261929072142794, guid: 32596b0044fbb25429f7e395df292fb3, type: 3}
+      propertyPath: m_FontData.m_FontStyle
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5931261929222877706, guid: 32596b0044fbb25429f7e395df292fb3, type: 3}
       propertyPath: m_AnchorMax.x
@@ -38006,17 +38010,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8665249930932293328, guid: 32596b0044fbb25429f7e395df292fb3, type: 3}
       propertyPath: m_Text
-      value: "There is a method to convey a rotation of an object using only two
-        static images. Figure 1 shows an object being rotated about the axis coming
-        out of the screen by 90 degrees. This method can describe rotations about
-        any axis. It is more limited than an animation, for instance the above figure
-        could also be describing a 270 rotation counterclockwise about the axis coming 
-        out of the screen, but generally this is a good simple method for showing
-        rotation.\r\n\r\nUsing this same idea we can also create a simple test\r.\n\nFigure
-        2. has a blank space in the bottom right. To complete the challenge one needs
-        to first understand what rotation is being described by the top half of the
-        image, then figure out what the bottom left object would look like if rotated
-        in the same way.\n"
+      value: 'In this practice module, an animation is displayed on the right side
+        of the screen, showing an object rotating a certain amount around a specific
+        axis. The object is visualized using a hidden line drawing technique. Meanwhile,
+        on the left side, there''s another hidden line drawing representing the user''s
+        object. As the user rotates their object, this drawing updates in real-time
+        to reflect the changes in orientation.
+
+
+
+        Figure 2. has a blank space
+        in the bottom right. To complete the challenge one needs to first understand
+        what rotation is being described by the right half of the image, then figure
+        out what the  left object would look like if rotated in the same way.
+
+'
       objectReference: {fileID: 0}
     - target: {fileID: 8665249930932293328, guid: 32596b0044fbb25429f7e395df292fb3, type: 3}
       propertyPath: m_FontData.m_BestFit
